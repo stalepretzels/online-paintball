@@ -2,33 +2,56 @@
 <html lang="en">
 
 <head>
+    <style>
+        #output {
+            color: #E2C044;
+            background: #2F3437;
+        }
 
+        body {
+            background-color: #1E2019;
+        }
+
+        input {
+            border-radius: 5px;
+            border-color: #587B7F;
+            background-color: #2F3437;
+            color: #E2C044;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Hello World!</h1>
-    <div id="future"></div>
+    <div id="output"></div>
     <form id="form" id="chat_form">
-        <input id="chat_input" type="text">
+        <input id="chat_input" type="text" autocapitalize="on" autocomplete="off">
         <input type="submit" value="Send">
     </form>
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        var randomWords = require('random-words');
+        var user = Math.floor(Math.random() * 10000);
         var socket = io.connect();
-        socket.on('connect', function(data) {
-           socket.emit('join', 'Hello World from client');
+        socket.on('connect', function (data) {
+            socket.emit('join', 'Hello World from client');
         });
-        socket.on('broad', function(data) {
-                $('#future').append(data+ "<br/>");
-          });
-       
-        $('form').submit(function(e){
+        socket.on('broad', function (data) {
+            $('#output').append(data + "<br/>");
+        });
+
+        $('form').submit(function (e) {
             e.preventDefault();
-            var message = $('#chat_input').val();
+            var message = user + ": " + $('#chat_input').val();
             socket.emit('messages', message);
         });
-       </script>
+    </script>
 </body>
 
 </html>
