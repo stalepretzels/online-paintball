@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <style>
+    <style id="darkMode">
         #output {
             color: #E2C044;
             background: #2F3437;
@@ -24,10 +24,15 @@
         select:focus {
             outline: none;
         }
+
+        #chat_input {
+            width: 35%;
+        }
     </style>
 </head>
 
 <body>
+    <div style="background-image: url('./dark.png');" id="mode"></div>
     <div id="output"></div>
     <form id="form" id="chat_form">
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off">
@@ -36,11 +41,10 @@
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var randomWords = require('random-words');
-        var user = Math.floor(Math.random() * 10000);
+        var user = Math.floor(Math.random() * 1000);
         var socket = io.connect();
         socket.on('connect', function (data) {
-            socket.emit('join', 'Hello World from client');
+            socket.emit('join', 'client has sucessfully connected to socket');
         });
         socket.on('broad', function (data) {
             $('#output').append(data + "<br/>");
@@ -48,9 +52,15 @@
 
         $('form').submit(function (e) {
             e.preventDefault();
-            var message = user + ": " + $('#chat_input').val();
+            var message = "@anonymous[" + user + "]: " + $('#chat_input').val();
             socket.emit('messages', message);
         });
+        document.getElementById('mode').addEventListener('click', function toggle() {
+            let styleEl = document.getElementById('styles')
+            // toggle enabled/disabled
+            if (styleEl.hasAttribute('media')) styleEl.removeAttribute('media')
+            else styleEl.setAttribute('media', "max-width: 1px")
+        })
     </script>
 </body>
 
