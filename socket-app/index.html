@@ -2,7 +2,45 @@
 <html lang="en">
 
 <head>
-    <style id="darkMode">
+    <style>
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+        }
+
+        #chat_input {
+            width: 35%;
+        }
+
+        #mode {
+            background: linear-gradient(to bottom, lightgrey 50%, black 50%);
+            border-radius: 500px;
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            bottom: 5px;
+            right: 5px;
+        }
+
+        input {
+            border-radius: 5px;
+        }
+
+        #output {
+            background-color: lightgrey;
+        }
+
+        #overlay {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: #2f34377d;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+    <style id="styles">
         #output {
             color: #E2C044;
             background: #2F3437;
@@ -25,14 +63,34 @@
             outline: none;
         }
 
-        #chat_input {
-            width: 35%;
+        h2 {
+            color: #587B7F
+        }
+
+        #overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <style id="menuOpen">
+        body {
+            overflow: hidden;
         }
     </style>
 </head>
 
 <body>
-    <div style="background-image: url('./dark.png');" id="mode"></div>
+    <div id="overlay">
+        <div id="inputMenu">
+            <h2>enter a screen name</h2>
+            <form id="login">
+                <input type="text" id="name" autocapitalize="on" autocomplete="off">
+                <input type="submit" value=" Confirm">
+            </form>
+        </div>
+    </div>
+    <div id="mode"></div>
     <div id="output"></div>
     <form id="form" id="chat_form">
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off">
@@ -41,7 +99,23 @@
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var user = Math.floor(Math.random() * 1000);
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        console.log(getCookie("name"))
+        var user = getCookie("name");
         var socket = io.connect();
         socket.on('connect', function (data) {
             socket.emit('join', 'client has sucessfully connected to socket');
@@ -50,11 +124,21 @@
             $('#output').append(data + "<br/>");
         });
 
-        $('form').submit(function (e) {
+        $('#form').submit(function (e) {
             e.preventDefault();
-            var message = "@anonymous[" + user + "]: " + $('#chat_input').val();
+            user = getCookie("uname")
+            var message = "@" + user + ": " + $('#chat_input').val();
             socket.emit('messages', message);
         });
+        $('#login').submit(function (e) {
+            e.preventDefault();
+            console.log($('#name').val())
+            document.cookie="uname=" + $('#name').val()
+            document.getElementById("overlay").style.visibility = "hidden"
+        })
+        if (user != "") {
+            document.getElementById("overlay").style.visibility = "hidden"
+        }
         document.getElementById('mode').addEventListener('click', function toggle() {
             let styleEl = document.getElementById('styles')
             // toggle enabled/disabled

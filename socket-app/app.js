@@ -1,9 +1,11 @@
 // app.js
 var express = require('express');
+var cookieParser = require('cookie-parser');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 
+app.use(cookieParser());
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function (req, res, next) {
     res.sendFile(__dirname + '/index.html');
@@ -22,4 +24,4 @@ io.on('connection', function (client) {
     });
 
 });
-server.listen(8080);
+server.listen(9080);
