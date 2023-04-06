@@ -39,6 +39,7 @@
             top: 0px;
             left: 0px;
         }
+
         #overlay {
             display: flex;
             justify-content: center;
@@ -76,10 +77,15 @@
         body {
             overflow: hidden;
         }
+        #chat_base {
+            position: absolute; bottom: 0px;
+        }
     </style>
+
 </head>
 
 <body>
+    <div id="mode"></div>
     <div id="overlay">
         <div id="inputMenu">
             <h2>enter a screen name</h2>
@@ -89,10 +95,10 @@
             </form>
         </div>
     </div>
-    <div id="mode"></div>
     <div id="output"></div>
     <form id="form" id="chat_form">
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off">
+        <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" style="visibility: hidden;">
         <input type="submit" value="Send">
     </form>
     <script src="/jquery/dist/jquery.js"></script>
@@ -113,7 +119,7 @@
             }
             return "";
         }
-        console.log(getCookie("name"))
+        console.log(getCookie("uname"))
         var user = getCookie("uname");
         var socket = io.connect();
         socket.on('connect', function (data) {
@@ -128,11 +134,16 @@
             user = getCookie("uname")
             var message = "@" + user + ": " + $('#chat_input').val();
             socket.emit('messages', message);
+            let new_element = document.getElementById('chat_base').cloneNode(true);
+            new_element.id = "chat_input"
+            new_element.style.visibility = "visible"
+            document.getElementById('chat_base').before(new_element);
+            document.getElementById('chat_input').remove();
         });
         $('#login').submit(function (e) {
             e.preventDefault();
             console.log($('#name').val())
-            document.cookie="uname=" + $('#name').val()
+            document.cookie = "uname=" + $('#name').val()
             document.getElementById("overlay").style.visibility = "hidden"
         })
         if (user != "") {
@@ -144,6 +155,17 @@
             if (styleEl.hasAttribute('media')) styleEl.removeAttribute('media')
             else styleEl.setAttribute('media', "max-width: 1px")
         })
+        function Reset() {
+            document.getElementById("chat_form").reset();
+        }
+
+        // Please do not use inline event handlers, use this instead:
+        document.getElementById("resetBtn").onclick = function () {
+            Reset();
+        }
+
+        // Alternatively: 
+        document.getElementById("resetBtn").onclick = Reset;
     </script>
 </body>
 
