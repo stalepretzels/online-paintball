@@ -72,13 +72,13 @@
         h2 {
             color: #587B7F
         }
+        #chat_base {
+            position: absolute; bottom: 0px;
+        }
     </style>
     <style id="menuOpen">
         body {
             overflow: hidden;
-        }
-        #chat_base {
-            position: absolute; bottom: 0px;
         }
     </style>
 
@@ -145,8 +145,10 @@
             console.log($('#name').val())
             document.cookie = "uname=" + $('#name').val()
             document.getElementById("overlay").style.visibility = "hidden"
+            document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
         })
         if (user != "") {
+            document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
             document.getElementById("overlay").style.visibility = "hidden"
         }
         document.getElementById('mode').addEventListener('click', function toggle() {
@@ -155,17 +157,6 @@
             if (styleEl.hasAttribute('media')) styleEl.removeAttribute('media')
             else styleEl.setAttribute('media', "max-width: 1px")
         })
-        function Reset() {
-            document.getElementById("chat_form").reset();
-        }
-
-        // Please do not use inline event handlers, use this instead:
-        document.getElementById("resetBtn").onclick = function () {
-            Reset();
-        }
-
-        // Alternatively: 
-        document.getElementById("resetBtn").onclick = Reset;
     </script>
 </body>
 
