@@ -63,12 +63,22 @@
             width: 100%;
             height: fit-content;
             background: transparent;
-           font-size: medium;
-           color: rgb(0, 173, 231);
+            font-size: medium;
+            color: rgb(0, 173, 231);
             border: 0px;
+            resize: none;
+        }
+
+        textarea::placeholder {
+            color: rgb(0, 173, 231);
+            height: fit-content;
         }
     </style>
     <style id="styles">
+        textarea::placeholder {
+            color: #E2C044
+        }
+
         #output {
             color: #E2C044;
             background: #2F3437;
@@ -157,15 +167,15 @@
     </div>
     <div id="output"></div>
     <form id="form" id="chat_form">
-        <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" minlength="1" maxlength="250">
-        <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" style="visibility: hidden;">
+        <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" maxlength="200" minlength="1">
+        <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" maxlength="200" minlength="1" style="visibility: hidden;">
         <input type="submit" value="Send">
     </form>
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
 
-function getCookie(cname) {
+        function getCookie(cname) {
             let name = cname + "=";
             let decodedCookie = decodeURIComponent(document.cookie);
             let ca = decodedCookie.split(';');
@@ -191,7 +201,7 @@ function getCookie(cname) {
         });
         socket.on('broad', function (data) {
 
-            var dataf = '<textarea disabled>' + data + '</textarea>'
+            var dataf = '<textarea disabled placeholder="' + data + '"></textarea>'
             $('#output').append(dataf);
         });
 
