@@ -17,11 +17,5 @@ io.on('connection', function (client) {
     client.on('join', function (data) {
         console.log(data);
     });
-
-    client.on('messages', function (data) {
-        client.emit('broad', data);
-        client.broadcast.emit('broad', data);
-    });
-
 });
 server.listen(8080);
