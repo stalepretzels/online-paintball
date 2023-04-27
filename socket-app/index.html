@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <title>Terra</title>
+    <link rel="icon" type="image/x-icon" href="/favico.png">
     <style>
         input:focus,
         textarea:focus,
@@ -9,18 +11,17 @@
             outline: none;
         }
 
+        mark {
+            color: black;
+        }
+
         #chat_input {
             width: 35%;
         }
 
-        #mode {
-            background: linear-gradient(to bottom, lightgrey 50%, black 50%);
-            border-radius: 500px;
-            width: 50px;
-            height: 50px;
-            position: fixed;
-            bottom: 5px;
-            right: 60px;
+        #output {
+            overflow-x: hidden;
+            z-index: -2;
         }
 
         input {
@@ -29,7 +30,12 @@
         }
 
         #output {
+            color: rgb(0, 173, 231);
             background-color: lightgrey;
+        }
+
+        a {
+            color: rgb(0, 173, 231);
         }
 
         #overlay {
@@ -45,6 +51,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 2;
         }
 
         #chat_base {
@@ -73,10 +80,71 @@
             color: rgb(0, 173, 231);
             height: fit-content;
         }
+
+        #settingsBtn {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 0;
+        }
+
+        img {
+            max-height: 250px;
+            max-width: 250px;
+            border-radius: 5px;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: auto;
+            margin-top: 5%;
+        }
+
+        td,
+        th {
+            border: 1px solid #808080;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #7a7a7a;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #3a3a3a;
+        }
+
+        #mdTable {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #2f34377d;
+            visibility: hidden;
+            z-index: 2;
+        }
+
+        svg {
+            color: rgb(0, 173, 231);
+        }
+
+        svg:hover {
+            color: rgb(0, 77, 105);
+        }
     </style>
     <style id="styles">
         textarea::placeholder {
             color: #E2C044
+        }
+
+        a {
+            color: #E2C044;
         }
 
         #output {
@@ -104,21 +172,6 @@
             color: #E2C044;
         }
 
-        #input {
-            border-radius: 5px;
-            border-color: #587B7F;
-            background-color: #2F3437;
-            color: #E2C044;
-            position: fixed;
-            left: 0%;
-            bottom: 0%;
-            border-width: 5px;
-        }
-
-        #input:hover {
-            color: #587B7F
-        }
-
         input:focus,
         textarea:focus,
         select:focus {
@@ -127,6 +180,20 @@
 
         h2 {
             color: #587B7F
+        }
+
+        img {
+            max-height: 250px;
+            max-width: 250px;
+            border-radius: 5px;
+        }
+
+        svg {
+            color: #E2C044;
+        }
+
+        svg:hover {
+            color: #7a6828;
         }
     </style>
     <style id="menuOpen">
@@ -137,11 +204,82 @@
     <style>
         #settingsMenu {
             position: fixed;
-            width: 100%;
+            width: 30%;
             height: 100%;
             background-color: rgba(161, 161, 161, 0.444);
-            left: 0px;
-            top: 0px;
+            right: -50%;
+            bottom: 0px;
+            z-index: 1;
+        }
+
+        .centeredContent {
+            display: grid;
+        }
+
+        #mode {
+            font-size: 2em;
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            left: 0;
+            right: 0;
+            margin: auto;
+            text-align: center;
+        }
+
+        #username {
+            font-size: 2em;
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            left: 0;
+            right: -125px;
+            margin: auto;
+            text-align: center;
+        }
+
+        #markdown {
+            font-size: 2em;
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            left: 0;
+            right: 125px;
+            margin: auto;
+            text-align: center;
+        }
+
+        #X {
+            position: absolute;
+            left: 5;
+            top: 5;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dead_center {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 30%;
+            height: 30%;
+            margin: auto;
+            background-color: green;
         }
     </style>
     <script>
@@ -163,55 +301,143 @@
     </script>
 </head>
 
-<body>
-    <div id="mode"></div>
-    <svg xmlns="http://www.w3.org/2000/svg" onclick="document.getElementById('overlay').style.visibility = 'visible'"
-        id="settings" width="50" height="50" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-        <path fill-rule="evenodd"
-            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+<body oncontextmenu="return false">
+    <div id="output"></div>
+    <div id="settingsMenu">
+        <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="X"
+            fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+        </svg>
+        <div class="centeredContent">
+            <svg id="mode" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+                class="bi bi-moon-stars" viewBox="0 0 16 16">
+                <path
+                    d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278zM4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.162c-.337.042-.68.063-1.029.063-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286z" />
+                <path
+                    d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+            </svg>
+            <svg id="username" xmlns="http://www.w3.org/2000/svg"
+                onclick="document.getElementById('overlay').style.visibility = 'visible'" width="50" height="50"
+                fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                <path fill-rule="evenodd"
+                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+            </svg>
+            <svg id="markdown" onclick="document.getElementById('mdTable').style.visibility = 'visible'"
+                xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-markdown"
+                viewBox="0 0 16 16">
+                <path
+                    d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z" />
+                <path fill-rule="evenodd"
+                    d="M9.146 8.146a.5.5 0 0 1 .708 0L11.5 9.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708z" />
+                <path fill-rule="evenodd" d="M11.5 5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z" />
+                <path
+                    d="M3.56 11V7.01h.056l1.428 3.239h.774l1.42-3.24h.056V11h1.073V5.001h-1.2l-1.71 3.894h-.039l-1.71-3.894H2.5V11h1.06z" />
+            </svg>
+        </div>
+    </div>
+    <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" id="settingsBtn" width="50" height="50"
+        fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+        <path
+            d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+        <path
+            d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
     </svg>
     <div id="overlay">
         <div id="inputMenu">
             <h2>enter a screen name</h2>
             <form id="login">
-                <input type="text" id="name" autocapitalize="on" autocomplete="off" maxlength="50" minlength="1"
-                    onpaste="return false">
+                <input type="text" id="name" autocapitalize="on" autocomplete="off" maxlength="50" minlength="1">
                 <input type="submit" value=" Confirm">
             </form>
         </div>
     </div>
-    <div id="output"></div>
-    <form id="form" id="chat_form">
-        <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" maxlength="200" minlength="1"
-            onpaste="return false">
-        <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" maxlength="200" minlength="1"
-            style="visibility: hidden;" onpaste="return false">
-        <svg xmlns="http://www.w3.org/2000/svg" id="input" width="45" height="35" fill="currentColor"
-            class="bi bi-markdown" viewBox="0 0 16 16">
+    <div id="mdTable">
+        <svg onclick="this.parentNode.style.visibility = 'hidden'; settingsMenu()" xmlns="http://www.w3.org/2000/svg"
+            width="50" height="50" id="X" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
             <path
-                d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z" />
-            <path fill-rule="evenodd"
-                d="M9.146 8.146a.5.5 0 0 1 .708 0L11.5 9.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708z" />
-            <path fill-rule="evenodd" d="M11.5 5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z" />
-            <path
-                d="M3.56 11V7.01h.056l1.428 3.239h.774l1.42-3.24h.056V11h1.073V5.001h-1.2l-1.71 3.894h-.039l-1.71-3.894H2.5V11h1.06z" />
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
         </svg>
+        <table class="dead_center">
+            <tr>
+                <th>Identifier</th>
+                <th>Result</th>
+            </tr>
+            <tr>
+                <td>\bld\</td>
+                <td><b>bold</b></td>
+            </tr>
+            <tr>
+                <td>\itl\</td>
+                <td><i>italics</i></td>
+            </tr>
+            <tr>
+                <td>\lnk\</td>
+                <td><a href="link">link</a></td>
+            </tr>
+            <tr>
+                <td>\img\</td>
+                <td><img src="AAAAAAAAAAAAAAA" /> image</td>
+            </tr>
+            <tr>
+                <td>\uln\</td>
+                <td><u>underline</u></td>
+            </tr>
+            <tr>
+                <td>\str\</td>
+                <td><s>strikethrough</s></td>
+            </tr>
+            <tr>
+                <th>Begin</th>
+                <th>End</th>
+            </tr>
+            <tr>
+                <td>\[identifier]\</td>
+                <td>\~[identifier]~\</td>
+            </tr>
+        </table>
+    </div>
+    <form id="form" id="chat_form">
+        <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" maxlength="200" minlength="1">
+        <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" maxlength="200" minlength="1"
+            style="visibility: hidden;">
         <input type="submit" value="Send">
     </form>
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        document.getElementById("chat_input").onkeypress = function (e) {
-            var chr = String.fromCharCode(e.which);
-            if ('></\\🍆🍑'.indexOf(chr) >= 0)
-                return false;
-        };
-        document.getElementById("name").onkeypress = function (e) {
-            var chr = String.fromCharCode(e.which);
-            if ('></\\🍆🍑'.indexOf(chr) >= 0)
-                return false;
-        };
+        var settingsOpen = true;
+        function settingsMenu() {
+            if (settingsOpen === true) {
+                document.getElementById("settingsMenu").animate([
+                    {
+                        right: '-50%'
+                    },
+
+                    {
+                        right: '0%'
+                    }
+                ], 500)
+                document.getElementById("settingsMenu").style.right = '0%'
+                settingsOpen = false;
+            }
+            else if (settingsOpen === false) {
+                document.getElementById("settingsMenu").animate([
+                    {
+                        right: '0%'
+                    },
+
+                    {
+                        right: '-50%'
+                    }
+                ], 500)
+                document.getElementById("settingsMenu").style.right = '-50%'
+                settingsOpen = true;
+            }
+        }
         function getCookie(cname) {
             let name = cname + "=";
             let decodedCookie = decodeURIComponent(document.cookie);
@@ -230,22 +456,122 @@
         console.log(getCookie("uname"))
         var user = getCookie("uname");
         var socket = io.connect();
-        socket.on('connect', function (data) {
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        var color = getRandomColor();
+        var id = Math.floor(Math.random() * 10000000000000);
+        var x = Math.floor(Math.random() * 90);
+        var y = Math.floor(Math.random() * 90);
+        var connected = false;
+        function pingForDisconnect() {
+            const p = document.querySelectorAll('.player')
+            var c = 0;
+            while (c < p.length) {
+                p[c].remove()
+                c++
+            }
+            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id);
+        }
+        window.addEventListener('load', function () {
             console.log('client has sucessfully connected to socket');
             var message = "@" + user + " has joined the chat"
             socket.emit('messages', message);
 
-        });
-        socket.on('broad', function (data) {
+            socket.emit('functions', "ping:" + id);
+            connected = true;
 
-            var dataf = data + "<br/>"
-            $('#output').append(dataf);
+        }); socket.on('broad', function (data) {
+            if (data.indexOf(">") > -1 || data.indexOf("<") > -1) {
+                $('#output').append("<b style='color: red'>@AutoMod: this message was blocked due to the potential security risk it poses</b><br/>");
+                return false;
+            }
+            else {
+                $('#output').append(checkMarkdown(data) + "<br/>");
+                var c = 0;
+                while (document.querySelectorAll("a").length > c) {
+                    document.querySelectorAll("a")[c].innerText = document.querySelectorAll("a")[c].getAttribute("href");
+                    c++;
+                }
+            }
+        });
+        document.onkeydown = function (event) {
+            switch (event.key) {
+                case 'ArrowLeft':
+                case 'a':
+                    socket.emit('functions', "moveClient:" + (x - 1) + ':' + y + ':' + id);
+                    x -= 1;
+                    break;
+                case 'ArrowUp':
+                case 'w':
+                    socket.emit('functions', "moveClient:" + x + ':' + (y - 1) + ':' + id);
+                    y -= 1;
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                    socket.emit('functions', "moveClient:" + (x + 1) + ':' + y + ':' + id);
+                    x += 1;
+                    break;
+                case 'ArrowDown':
+                case 's':
+                    socket.emit('functions', "moveClient:" + x + ':' + (y + 1) + ':' + id);
+                    y += 1;
+                    break;
+            }
+        };
+        //functions go here
+        function generateUser(x, y, color, id) {
+            var newDiv = document.createElement('div');
+            newDiv.id = id;
+            newDiv.className = 'player'
+            newDiv.style.backgroundColor = color;
+            newDiv.style.left = x + '%'
+            newDiv.style.top = y + '%'
+            newDiv.style.width = '50px'
+            newDiv.style.height = '50px'
+            newDiv.style.position = 'absolute'
+            document.body.appendChild(newDiv);
+        }
+        function moveClient(x, y, id) {
+            document.getElementById(id).style.left = x + '%';
+            document.getElementById(id).style.top = y + '%';
+        }
+        function activePing(remove) {
+            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id);
+        }
+        socket.on('functions', function (data) {
+            console.log("function call received")
+            const processedData = data.split(':')
+            if (processedData[0] == 'ping') {
+
+                activePing(processedData[1])
+                document.getElementById(id).remove()
+            }
+            else if (processedData[0] == 'generateUser') {
+                generateUser(processedData[1], processedData[2], processedData[3], processedData[4])
+
+            }
+            else if (processedData[0] == 'moveClient') {
+                moveClient(processedData[1], processedData[2], processedData[3])
+            }
+            else if (processedData[0] == 'delUser') {
+                deleteUser(processedData[1])
+            }
+            else {
+                $('#output').append("<b style='color: red'>@AutoMod: unrecognized function, please do not attempt to send functions through the console</b><br/>")
+            }
         });
 
         $('#form').submit(function (e) {
             e.preventDefault();
             user = getCookie("uname")
             var message = '@' + user + ": " + $('#chat_input').val();
+
             socket.emit('messages', message);
             let new_element = document.getElementById('chat_base').cloneNode(true);
             new_element.id = "chat_input"
@@ -260,11 +586,7 @@
             document.getElementById("overlay").style.visibility = "hidden"
             document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
             document.getElementById('name').value = getCookie("uname");
-            if (getCookie("uname") == "" || user == "") {
-                document.getElementById('name').value = 'anonymous';
-                document.cookie = "uname=anonymous"
-            }
-
+            settingsMenu();
         })
         if (user != "") {
             document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
@@ -275,7 +597,34 @@
             // toggle enabled/disabled
             if (styleEl.hasAttribute('media')) styleEl.removeAttribute('media')
             else styleEl.setAttribute('media', "max-width: 1px")
+            settingsMenu();
         })
+        function checkMarkdown(data) {
+            var dataSplit = data.split("\\")
+            var identifiers = new Array;
+            identifiers.push("bld", "~bld~", "itl", "~itl~", "mrk", "~mrk~", "uln", "~uln~", "str", "~str~", "lnk", "~lnk~", "img", "~img~")
+            var tags = new Array;
+            tags.push("<b>", "</b>", "<i>", "</i>", "<mark>", "</mark>", "<u>", "</u>", "<s>", "</s>", "<a href='", "'></a>", "<br/><img src='", "'/><br/>")
+            var c = 1;
+            var c2 = 0;
+            var result
+            while (c < dataSplit.length) {
+                while (c2 < identifiers.length) {
+                    if (dataSplit[c] == identifiers[c2]) {
+                        dataSplit[c] = tags[c2]
+                    }
+                    c2++;
+                }
+                c2 = 0;
+                c++;
+            }
+            c = 0;
+            while (c < dataSplit.length) {
+                result += dataSplit[c]
+                c++;
+            }
+            return (result.split("undefined")[1])
+        }
     </script>
 </body>
 
