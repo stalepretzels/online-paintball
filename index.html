@@ -56,6 +56,16 @@
             background-color: rgba(211, 211, 211, 0.583);
         }
 
+        #backgroundOverlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(199, 199, 199, 0.467);
+            z-index: -1;
+        }
+
         a {
             color: rgb(0, 105, 5);
         }
@@ -272,6 +282,7 @@
 </head>
 
 <body oncontextmenu="return false">
+<div id="backgroundOverlay"></div>
     <div id="output"></div>
     <div id="settingsMenu">
         <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="X"
@@ -441,10 +452,10 @@
         var y = Math.floor(Math.random() * 90);
         var connected = false;
         window.addEventListener('load', function () {
+            socket.emit('functions', 'disconnect:')
             console.log('client has sucessfully connected to socket');
             var message = "@" + user + " has joined the chat"
             socket.emit('messages', message);
-            socket.emit('functions', "ping:" + id);
             connected = true;
 
         }); socket.on('broad', function (data) {
