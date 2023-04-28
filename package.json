@@ -1,7 +1,21 @@
 {
+  "name": "socket-app",
+  "version": "1.0.0",
+  "description": "a",
+  "main": "index.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "author": "me",
+  "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.6",
-    "random-words": "^1.3.0",
+    "express": "^4.18.2",
+    "ip": "^1.1.8",
+    "jquery": "^3.6.4",
+    "markdown-it": "^13.0.1",
+    "request-ip": "^3.3.0",
+    "socket.io": "^4.6.1",
     "striptags": "^3.2.0"
   }
 }
