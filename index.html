@@ -122,9 +122,11 @@
         }
 
         img {
-            max-height: 250px;
-            max-width: 250px;
+            max-height: 50px;
+            max-width: 50px;
             border-radius: 5px;
+            position: absolute;
+            bottom: 0px;
         }
 
         table {
@@ -243,6 +245,9 @@
             border-radius: 6px;
             background-size: 50px;
             background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .center {
@@ -284,7 +289,6 @@
 
 <body oncontextmenu="return false">
     <div id="backgroundOverlay"></div>
-    <div id="output"></div>
     <div id="settingsMenu">
         <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="X"
             fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
@@ -376,6 +380,7 @@
         </table>
     </div>
     <form id="form" id="chat_form">
+        <input id="images" type="file" accept="image/*, video/*, audio/*">
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" minlength="1">
         <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" minlength="1"
             style="visibility: hidden;">
@@ -429,7 +434,6 @@
             return "";
         }
         console.log(getCookie("uname"))
-        var user = getCookie("uname");
         var socket = io.connect();
         function getRandomColor() {
             var letters = '0123456789ABCDEF';
@@ -443,6 +447,7 @@
         skins.push('OKG.png', 'pirate.jpeg', 'robot.jpg', 'crystal.png', 'steampunk.png', 'avocadocat.png', 'car.png', 'galaxy.png', 'clover.png')
         var items = new Array;
         items.push('bomb.png')
+        var user = getCookie("uname");
         var color = getRandomColor();
         var rndInt = Math.floor(Math.random() * skins.length)
         var skin = skins[rndInt]
@@ -454,21 +459,20 @@
         var connected = false;
         window.addEventListener('load', function () {
             socket.emit('functions', 'disconnect:')
-            console.log('client has sucessfully connected to socket');
-            var message = "@" + user + " has joined the chat"
-            socket.emit('messages', message);
             connected = true;
-
-        }); socket.on('broad', function (data) {
+            console.log('client has sucessfully connected to socket');
+        });
+        socket.on('broad', function (data) {
             if (data.indexOf(">") > -1 || data.indexOf("<") > -1) {
-                $('#output').append("<b style='color: red'>@AutoMod: this message was blocked due to the potential security risk it poses</b><br/>");
                 return false;
             }
             else {
-                $('#output').append(checkMarkdown(data) + "<br/>");
+                $(`#txt` + data.split(';')[0]).empty();
+                console.log(data)
+                $(`#txt` + data.split(';')[0]).append(checkMarkdown(data.split(';')[1]));
                 var c = 0;
                 while (document.querySelectorAll("a").length > c) {
-                    document.querySelectorAll("a")[c].innerText = document.querySelectorAll("a")[c].getAttribute("href");
+                    document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
                     c++;
                 }
             }
@@ -498,7 +502,7 @@
             }
         };
         //functions go here
-        function generateUser(x, y, color, id, skin) {
+        function generateUser(x, y, color, id, skin, uname) {
             var newDiv = document.createElement('div');
             newDiv.id = id;
             newDiv.className = 'player'
@@ -509,6 +513,21 @@
             newDiv.style.width = '50px'
             newDiv.style.height = '50px'
             newDiv.style.position = 'absolute'
+            var paragraph = document.createElement('div');
+            paragraph.style.position = 'absolute'
+            paragraph.style.top = '-25px'
+            paragraph.innerText = uname;
+            paragraph.id = 'p:' + id
+            paragraph.style.backgroundColor = 'white'
+            paragraph.style.borderRadius = '5px'
+            var tst = document.createElement("div");
+            tst.style.position = 'absolute'
+            tst.style.top = '-50px'
+            tst.style.backgroundColor = 'white'
+            tst.id = 'txt' + id;
+            tst.style.borderRadius = '5px'
+            newDiv.appendChild(tst)
+            newDiv.appendChild(paragraph)
             document.body.appendChild(newDiv);
         }
         function moveClient(x, y, id) {
@@ -516,7 +535,7 @@
             document.getElementById(id).style.top = y + '%';
         }
         function activePing() {
-            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + skin + ':' + item);
+            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + skin + ':' + item + ':' + user);
         }
 
         function disconnect() {
@@ -536,7 +555,7 @@
                 document.getElementById(id).remove()
             }
             else if (processedData[0] == 'generateUser') {
-                generateUser(processedData[1], processedData[2], processedData[3], processedData[4], processedData[5])
+                generateUser(processedData[1], processedData[2], processedData[3], processedData[4], processedData[5], processedData[7])
 
             }
             else if (processedData[0] == 'moveClient') {
@@ -550,22 +569,22 @@
                 activePing()
             }
             else {
-                $('#output').append("<b style='color: red'>@AutoMod: unrecognized function, please do not attempt to send functions through the console</b><br/>")
+                console.log('UWU! THERE ARE CONSEQUENCES!')
             }
         });
 
         $('#form').submit(function (e) {
             e.preventDefault();
             user = getCookie("uname")
-            var message = '@' + user + ": " + $('#chat_input').val();
-
-            socket.emit('messages', message);
+            var message = $('#images').val();
+            socket.emit('messages', id + ';' + message);
             let new_element = document.getElementById('chat_base').cloneNode(true);
             new_element.id = "chat_input"
             new_element.style.visibility = "visible"
             document.getElementById('chat_base').before(new_element);
             document.getElementById('chat_input').remove();
         });
+        
         $('#login').submit(function (e) {
             e.preventDefault();
             console.log($('#name').val())
@@ -579,19 +598,12 @@
             document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
             document.getElementById("overlay").style.visibility = "hidden"
         }
-        document.getElementById('mode').addEventListener('click', function toggle() {
-            let styleEl = document.getElementById('styles')
-            // toggle enabled/disabled
-            if (styleEl.hasAttribute('media')) styleEl.removeAttribute('media')
-            else styleEl.setAttribute('media', "max-width: 1px")
-            settingsMenu();
-        })
         function checkMarkdown(data) {
             var dataSplit = data.split("\\")
             var identifiers = new Array;
             identifiers.push("bld", "~bld~", "itl", "~itl~", "mrk", "~mrk~", "uln", "~uln~", "str", "~str~", "lnk", "~lnk~", "img", "~img~")
             var tags = new Array;
-            tags.push("<b>", "</b>", "<i>", "</i>", "<mark>", "</mark>", "<u>", "</u>", "<s>", "</s>", "<a href='", "'></a>", "<br/><img src='", "'/><br/>")
+            tags.push("<b>", "</b>", "<i>", "</i>", "<mark>", "</mark>", "<u>", "</u>", "<s>", "</s>", "<a href='", "'></a>", "<img src='", "'/>")
             var c = 1;
             var c2 = 0;
             var result

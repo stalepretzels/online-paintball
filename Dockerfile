@@ -11,5 +11,5 @@ COPY . /dist
 RUN npm install
 
 # Define the entry point for the container
-EXPOSE 8080/tcp
+EXPOSE 6942/tcp
 CMD ["node", "app.js"]
