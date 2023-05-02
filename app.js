@@ -26,7 +26,7 @@ app.get('/', function (req, res, next) {
         c++
     }
     if (b === false) {
-        res.sendFile(__dirname + '/index.html');
+        res.sendFile(__dirname + '/test.html');
     }
     var clientIp = requestIp.getClientIp(req)
     console.log(`network Ip: ${clientIp}`)

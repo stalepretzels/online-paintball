@@ -289,6 +289,7 @@
 
 <body oncontextmenu="return false">
     <div id="backgroundOverlay"></div>
+    <div id="output"></div>
     <div id="settingsMenu">
         <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="X"
             fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
@@ -380,7 +381,6 @@
         </table>
     </div>
     <form id="form" id="chat_form">
-        <input id="images" type="file" accept="image/*, video/*, audio/*">
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" minlength="1">
         <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" minlength="1"
             style="visibility: hidden;">
@@ -467,9 +467,8 @@
                 return false;
             }
             else {
-                $(`#txt` + data.split(';')[0]).empty();
                 console.log(data)
-                $(`#txt` + data.split(';')[0]).append(checkMarkdown(data.split(';')[1]));
+                $(`#output`).append(checkMarkdown(data.split(';')[1]));
                 var c = 0;
                 while (document.querySelectorAll("a").length > c) {
                     document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
@@ -569,22 +568,22 @@
                 activePing()
             }
             else {
-                console.log('UWU! THERE ARE CONSEQUENCES!')
+                console.log('no')
             }
         });
 
         $('#form').submit(function (e) {
             e.preventDefault();
             user = getCookie("uname")
-            var message = $('#images').val();
-            socket.emit('messages', id + ';' + message);
+            var message = $('#chat_input').val();
+            socket.emit('messages', id + ';@' + user + ': ' + message);
             let new_element = document.getElementById('chat_base').cloneNode(true);
             new_element.id = "chat_input"
             new_element.style.visibility = "visible"
             document.getElementById('chat_base').before(new_element);
             document.getElementById('chat_input').remove();
         });
-        
+
         $('#login').submit(function (e) {
             e.preventDefault();
             console.log($('#name').val())
