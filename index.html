@@ -122,11 +122,9 @@
         }
 
         img {
-            max-height: 50px;
-            max-width: 50px;
+            max-height: 250px;
+            max-width: 250px;
             border-radius: 5px;
-            position: absolute;
-            bottom: 0px;
         }
 
         table {
@@ -468,7 +466,7 @@
             }
             else {
                 console.log(data)
-                $(`#output`).append(checkMarkdown(data.split(';')[1]));
+                $(`#output`).append(checkMarkdown(data.split(';')[1]) + '<br/>');
                 var c = 0;
                 while (document.querySelectorAll("a").length > c) {
                     document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
