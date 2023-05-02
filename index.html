@@ -312,6 +312,7 @@
                 font-size: 18px;
                 padding-left: 10px;
                 position: absolute;
+                background-color: rgba(211, 211, 211, 0.583);
                 bottom: -20px;
                 left: 50%;
                 z-index: 1;
@@ -324,7 +325,7 @@
                 bottom: 70px;
                 right: 50px;
                 visibility: hidden;
-                background-color: #f3f3f3;
+                background-color: rgba(130, 130, 130, 0.467);
                 padding: 5px;
                 display: flex;
                 flex-wrap: wrap;
@@ -374,7 +375,6 @@
                 <div class="emoji" onclick="sendEmoji('🥰')">🥰</div>
                 <div class="emoji" onclick="sendEmoji('😘')">😘</div>
                 <div class="emoji" onclick="sendEmoji('😗')">😗</div>
-                <div class="emoji" onclick="sendEmoji('☺️')">☺️</div>
                 <div class="emoji" onclick="sendEmoji('😚')">😚</div>
                 <div class="emoji" onclick="sendEmoji('😙')">😙</div>
                 <div class="emoji" onclick="sendEmoji('😋')">😋</div>
@@ -657,10 +657,11 @@
         //functions go here
         function react(x, y, emoji)
         {
+            
             var newReact = document.createElement('h1');
             newReact.style.position = 'absolute'
-            newReact.style.left = x + '%'
-            newReact.style.top = y + '%'
+            newReact.style.left = x++ + '%'
+            newReact.style.top = y-3 + '%'
             newReact.innerText = emoji
             document.body.appendChild(newReact)
         }
