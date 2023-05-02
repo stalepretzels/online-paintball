@@ -53,18 +53,19 @@
         }
 
         #output {
+            z-index: -2;
             color: rgb(0, 105, 5);
             background-color: rgba(211, 211, 211, 0.583);
         }
 
         #backgroundOverlay {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 200%;
+            height: 200%;
             top: 0px;
             left: 0px;
             background-color: rgba(199, 199, 199, 0.467);
-            z-index: -1;
+            z-index: -100;
         }
 
         a {
@@ -84,7 +85,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 2;
+            z-index: -40;
         }
 
         #chat_base {
@@ -246,6 +247,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 0;
         }
 
         .center {
@@ -264,6 +266,12 @@
             height: 30%;
             margin: auto;
             background-color: green;
+        }
+
+        #emojiPickerContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
     <script>
@@ -286,6 +294,154 @@
 </head>
 
 <body oncontextmenu="return false">
+    <div id='emojiPickerContainer'>
+        <style>
+            .container {
+                position: relative;
+                /* Add position property */
+                width: 80%;
+                margin: auto;
+            }
+
+            #emoji-input {
+                border: none;
+                border-radius: 50px;
+                width: 250px;
+                height: 50px;
+                margin: 20px;
+                font-size: 18px;
+                padding-left: 10px;
+                position: absolute;
+                bottom: -20px;
+                left: 50%;
+                z-index: 1;
+
+                /* Add position property */
+            }
+
+            .emoji-container {
+                position: absolute;
+                bottom: 70px;
+                right: 50px;
+                visibility: hidden;
+                background-color: #f3f3f3;
+                padding: 5px;
+                display: flex;
+                flex-wrap: wrap;
+                overflow-x: wrap;
+                overflow-y: scroll;
+                right: 0px;
+                z-index: 1;
+                border-radius: 10px;
+            }
+
+            .emoji-container.visible {
+                visibility: visible;
+            }
+
+            .emoji {
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                margin-right: 10px;
+                margin-top: 10px;
+                font-size: 20px;
+                text-align: center;
+                cursor: pointer;
+            }
+            h1 {
+                z-index: 0;
+            }
+        </style>
+        <div class="emoji-picker">
+            <button id="emoji-input">reactions</button>
+            <div class="emoji-container">
+                <div class="emoji" onclick="sendEmoji('😀')">😀</div>
+                <div class="emoji" onclick="sendEmoji('😃')">😃</div>
+                <div class="emoji" onclick="sendEmoji('😄')">😄</div>
+                <div class="emoji" onclick="sendEmoji('😁')">😁</div>
+                <div class="emoji" onclick="sendEmoji('😆')">😆</div>
+                <div class="emoji" onclick="sendEmoji('😅')">😅</div>
+                <div class="emoji" onclick="sendEmoji('😂')">😂</div>
+                <div class="emoji" onclick="sendEmoji('🤣')">🤣</div>
+                <div class="emoji" onclick="sendEmoji('😊')">😊</div>
+                <div class="emoji" onclick="sendEmoji('😇')">😇</div>
+                <div class="emoji" onclick="sendEmoji('🙂')">🙂</div>
+                <div class="emoji" onclick="sendEmoji('🙃')">🙃</div>
+                <div class="emoji" onclick="sendEmoji('😉')">😉</div>
+                <div class="emoji" onclick="sendEmoji('😌')">😌</div>
+                <div class="emoji" onclick="sendEmoji('😍')">😍</div>
+                <div class="emoji" onclick="sendEmoji('🥰')">🥰</div>
+                <div class="emoji" onclick="sendEmoji('😘')">😘</div>
+                <div class="emoji" onclick="sendEmoji('😗')">😗</div>
+                <div class="emoji" onclick="sendEmoji('☺️')">☺️</div>
+                <div class="emoji" onclick="sendEmoji('😚')">😚</div>
+                <div class="emoji" onclick="sendEmoji('😙')">😙</div>
+                <div class="emoji" onclick="sendEmoji('😋')">😋</div>
+                <div class="emoji" onclick="sendEmoji('😛')">😛</div>
+                <div class="emoji" onclick="sendEmoji('😜')">😜</div>
+                <div class="emoji" onclick="sendEmoji('🤪')">🤪</div>
+                <div class="emoji" onclick="sendEmoji('😝')">😝</div>
+                <div class="emoji" onclick="sendEmoji('🤑')">🤑</div>
+                <div class="emoji" onclick="sendEmoji('🤗')">🤗</div>
+                <div class="emoji" onclick="sendEmoji('🤔')">🤔</div>
+                <div class="emoji" onclick="sendEmoji('🤨')">🤨</div>
+                <div class="emoji" onclick="sendEmoji('😐')">😐</div>
+                <div class="emoji" onclick="sendEmoji('😑')">😑</div>
+                <div class="emoji" onclick="sendEmoji('😶')">😶</div>
+                <div class="emoji" onclick="sendEmoji('😏')">😏</div>
+                <div class="emoji" onclick="sendEmoji('😒')">😒</div>
+                <div class="emoji" onclick="sendEmoji('🙄')">🙄</div>
+                <div class="emoji" onclick="sendEmoji('😬')">😬</div>
+                <div class="emoji" onclick="sendEmoji('🤥')">🤥</div>
+                <div class="emoji" onclick="sendEmoji('😌')">😌</div>
+                <div class="emoji" onclick="sendEmoji('😔')">😔</div>
+                <div class="emoji" onclick="sendEmoji('😪')">😪</div>
+                <div class="emoji" onclick="sendEmoji('😴')">😴</div>
+                <div class="emoji" onclick="sendEmoji('😷')">😷</div>
+                <div class="emoji" onclick="sendEmoji('🤒')">🤒</div>
+                <div class="emoji" onclick="sendEmoji('🤕')">🤕</div>
+                <div class="emoji" onclick="sendEmoji('🤢')">🤢</div>
+                <div class="emoji" onclick="sendEmoji('🤮')">🤮</div>
+                <div class="emoji" onclick="sendEmoji('🤧')">🤧</div>
+                <div class="emoji" onclick="sendEmoji('🥵')">🥵</div>
+                <div class="emoji" onclick="sendEmoji('🥶')">🥶</div>
+                <div class="emoji" onclick="sendEmoji('🥴')">🥴</div>
+                <div class="emoji" onclick="sendEmoji('😵')">😵</div>
+                <div class="emoji" onclick="sendEmoji('🤯')">🤯</div>
+                <div class="emoji" onclick="sendEmoji('🤠')">🤠</div>
+                <div class="emoji" onclick="sendEmoji('🥳')">🥳</div>
+                <div class="emoji" onclick="sendEmoji('😎')">😎</div>
+                <div class="emoji" onclick="sendEmoji('🤓')">🤓</div>
+                <div class="emoji" onclick="sendEmoji('🧐')">🧐</div>
+                <div class="emoji" onclick="sendEmoji('😕')">😕</div>
+                <div class="emoji" onclick="sendEmoji('😟')">😟</div>
+                <div class="emoji" onclick="sendEmoji('🙁')">🙁</div>
+                <div class="emoji" onclick="sendEmoji('☹️')">☹️</div>
+                <div class="emoji" onclick="sendEmoji('😮')">😮</div>
+                <div class="emoji" onclick="sendEmoji('😯')">😯</div>
+                <div class="emoji" onclick="sendEmoji('😲')">😲</div>
+                <div class="emoji" onclick="sendEmoji('☠️')">☠️</div>
+                <div class="emoji" onclick="sendEmoji('🤕')">🤕</div>
+                <div class="emoji" onclick="sendEmoji('💩')">💩</div>
+                <div class="emoji" onclick="sendEmoji('👻')">👻</div>
+                <div class="emoji" onclick="sendEmoji('👽')">👽</div>
+                <div class="emoji" onclick="sendEmoji('🤖')">🤖</div>
+                <div class="emoji" onclick="sendEmoji('🎃')">🎃</div>
+                <div class="emoji" onclick="sendEmoji('🎅')">🎅</div>
+                <div class="emoji" onclick="sendEmoji('😼')">😼</div>
+                <div class="emoji" onclick="sendEmoji('😹')">😹</div>
+                <div class="emoji" onclick="sendEmoji('🙀')">🙀</div>
+                <div class="emoji" onclick="sendEmoji('😾')">😾</div>
+                <div class="emoji" onclick="sendEmoji('😿')">😿</div>
+                <div class="emoji" onclick="sendEmoji('😻')">😻</div>
+                <div class="emoji" onclick="sendEmoji('😺')">😺</div>
+                <div class="emoji" onclick="sendEmoji('😸')">😸</div>
+                <div class="emoji" onclick="sendEmoji('😽')">😽</div>
+            </div>
+        </div>
+
+    </div>
     <div id="backgroundOverlay"></div>
     <div id="output"></div>
     <div id="settingsMenu">
@@ -442,7 +598,7 @@
             return color;
         }
         var skins = new Array;
-        skins.push('OKG.png', 'pirate.jpeg', 'robot.jpg', 'crystal.png', 'steampunk.png', 'avocadocat.png', 'car.png', 'galaxy.png', 'clover.png')
+        skins.push('OKG.png', 'pirate.jpeg', 'robot.jpg', 'crystal.png', 'steampunk.png', 'avocadocat.png', 'car.png', 'galaxy.png', 'clover.png', 'avocadoThing.jpeg')
         var items = new Array;
         items.push('bomb.png')
         var user = getCookie("uname");
@@ -466,7 +622,7 @@
             }
             else {
                 console.log(data)
-                $(`#output`).append(checkMarkdown(data.split(';')[1]) + '<br/>');
+                $(`#output`).append(checkMarkdown(data) + '<br/>');
                 var c = 0;
                 while (document.querySelectorAll("a").length > c) {
                     document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
@@ -499,6 +655,15 @@
             }
         };
         //functions go here
+        function react(x, y, emoji)
+        {
+            var newReact = document.createElement('h1');
+            newReact.style.position = 'absolute'
+            newReact.style.left = x + '%'
+            newReact.style.top = y + '%'
+            newReact.innerText = emoji
+            document.body.appendChild(newReact)
+        }
         function generateUser(x, y, color, id, skin, uname) {
             var newDiv = document.createElement('div');
             newDiv.id = id;
@@ -565,6 +730,9 @@
                 disconnect()
                 activePing()
             }
+            else if (processedData[0] == 'reaction') {
+                react(processedData[1], processedData[2], processedData[3])
+            }
             else {
                 console.log('no')
             }
@@ -574,14 +742,24 @@
             e.preventDefault();
             user = getCookie("uname")
             var message = $('#chat_input').val();
-            socket.emit('messages', id + ';@' + user + ': ' + message);
+            socket.emit('messages', '@' + user + ': ' + message);
             let new_element = document.getElementById('chat_base').cloneNode(true);
             new_element.id = "chat_input"
             new_element.style.visibility = "visible"
             document.getElementById('chat_base').before(new_element);
             document.getElementById('chat_input').remove();
         });
-
+        function sendEmoji(emoji) {
+            emojiContainer.classList.remove('visible');
+            socket.emit('functions', 'reaction:' + x + ':' + y + ':' + emoji)
+        }
+        // Get the input element and emoji container
+        const inputElement = document.querySelector('#emoji-input');
+        const emojiContainer = document.querySelector('.emoji-container');
+        // Add event listeners to show/hide the emoji container
+        inputElement.addEventListener('focusin', () => {
+            emojiContainer.classList.add('visible');
+        });
         $('#login').submit(function (e) {
             e.preventDefault();
             console.log($('#name').val())
@@ -621,6 +799,7 @@
             }
             return (result.split("undefined")[1])
         }
+
     </script>
 </body>
 
