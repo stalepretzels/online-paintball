@@ -501,6 +501,7 @@
             <h2>enter a screen name</h2>
             <form id="login">
                 <input type="text" id="name" autocapitalize="on" autocomplete="off" maxlength="50" minlength="1">
+                <img onclick="ChangeSkin()" id="skin"/>
                 <input type="submit" value=" Confirm">
             </form>
         </div>
@@ -635,10 +636,6 @@
             console.log('client has sucessfully connected to socket');
         });
         socket.on('broad', function (data) {
-            //if (data.indexOf(">") > -1 || data.indexOf("<") > -1) {
-            //    return false;
-            //}
-            //else {
             console.log(data)
             $(`#output`).append(checkMarkdown(data) + '<br/>');
             var c = 0;
@@ -646,7 +643,6 @@
                 document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
                 c++;
             }
-            //  }
         });
         document.onkeydown = function (event) {
             switch (event.key) {
@@ -778,7 +774,7 @@
             }
             else {
                 if (message != "") {
-                    socket.emit('messages', '@' + user + ': ' + message + '<br/>')
+                    socket.emit('messages', '@' + user + ': ' + message + '<br style="display: none;"/>')
                 }
             }
             form.reset()
