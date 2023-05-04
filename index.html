@@ -235,6 +235,20 @@
             text-align: center;
         }
 
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-panel {
+            background-color: rgba(171, 171, 171, 0.467);
+            color: rgba(255, 255, 255, 0.467);
+        }
+
+        audio {
+            outline: none;
+        }
+
+        audio::-webkit-media-controls-play-button {
+            background-color: transparent;
+        }
+
         #X {
             position: absolute;
             left: 5;
@@ -315,8 +329,8 @@
                 padding-left: 10px;
                 position: absolute;
                 background-color: rgba(211, 211, 211, 0.583);
-                bottom: -20px;
-                left: 50%;
+                bottom: -19px;
+                left: 75%;
                 z-index: 1;
 
                 /* Add position property */
@@ -352,6 +366,7 @@
                 text-align: center;
                 cursor: pointer;
             }
+
             h1 {
                 z-index: 0;
             }
@@ -540,6 +555,7 @@
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" minlength="1">
         <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" minlength="1"
             style="visibility: hidden;">
+        <input id="chat_input_uploads" onchange="getBase64(this[0])" type="file" accept="image/*, audio/*">
         <input type="submit" value="Send">
     </form>
     <script src="/jquery/dist/jquery.js"></script>
@@ -619,18 +635,18 @@
             console.log('client has sucessfully connected to socket');
         });
         socket.on('broad', function (data) {
-            if (data.indexOf(">") > -1 || data.indexOf("<") > -1) {
-                return false;
+            //if (data.indexOf(">") > -1 || data.indexOf("<") > -1) {
+            //    return false;
+            //}
+            //else {
+            console.log(data)
+            $(`#output`).append(checkMarkdown(data) + '<br/>');
+            var c = 0;
+            while (document.querySelectorAll("a").length > c) {
+                document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
+                c++;
             }
-            else {
-                console.log(data)
-                $(`#output`).append(checkMarkdown(data) + '<br/>');
-                var c = 0;
-                while (document.querySelectorAll("a").length > c) {
-                    document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
-                    c++;
-                }
-            }
+            //  }
         });
         document.onkeydown = function (event) {
             switch (event.key) {
@@ -657,13 +673,12 @@
             }
         };
         //functions go here
-        function react(x, y, emoji)
-        {
-            
+        function react(x, y, emoji) {
+
             var newReact = document.createElement('h1');
             newReact.style.position = 'absolute'
             newReact.style.left = x++ + '%'
-            newReact.style.top = y-3 + '%'
+            newReact.style.top = y - 3 + '%'
             newReact.innerText = emoji
             document.body.appendChild(newReact)
         }
@@ -740,17 +755,33 @@
                 console.log('no')
             }
         });
-
+        const input = document.querySelector('input[type="file"]');
+        const form = document.getElementById('form');
         $('#form').submit(function (e) {
             e.preventDefault();
-            user = getCookie("uname")
             var message = $('#chat_input').val();
-            socket.emit('messages', '@' + user + ': ' + message);
-            let new_element = document.getElementById('chat_base').cloneNode(true);
-            new_element.id = "chat_input"
-            new_element.style.visibility = "visible"
-            document.getElementById('chat_base').before(new_element);
-            document.getElementById('chat_input').remove();
+            var has_selected_file = $.trim($('input[type=file]').val());
+            const file = input.files[0];
+            const reader = new FileReader();
+            if (has_selected_file != "") {
+                reader.addEventListener('load', () => {
+                    const base64String = reader.result;
+                    if (base64String.split('/')[0] == 'data:image') {
+                        socket.emit('messages', '@' + user + ': ' + message + '<br/>' + '<img src="' + base64String + '"/>');
+                    }
+                    else if (base64String.split('/')[0] == 'data:audio') {
+                        socket.emit('messages', '@' + user + ': ' + message + '<br/>' + '<audio controls src="' + base64String + '"/>');
+                    }
+
+                });
+                reader.readAsDataURL(file);
+            }
+            else {
+                if (message != "") {
+                    socket.emit('messages', '@' + user + ': ' + message + '<br/>')
+                }
+            }
+            form.reset()
         });
         function sendEmoji(emoji) {
             emojiContainer.classList.remove('visible');
@@ -804,6 +835,7 @@
         }
 
     </script>
+
 </body>
 
 </html>
