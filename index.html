@@ -245,7 +245,7 @@
             outline: none;
             height: 50px;
             display: flex;
-  flex-direction: column;
+            flex-direction: column;
         }
 
         audio::-webkit-media-controls-play-button {
@@ -666,9 +666,9 @@
         });
         socket.on('broad', function (data) {
             console.log(data)
-                $(`#output`).append(checkMarkdown(data) + '<br/>');
+            $(`#output`).append(checkMarkdown(data) + '<br/>');
 
-                var c = 0;
+            var c = 0;
             while (document.querySelectorAll("a").length > c) {
                 document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
                 c++;
