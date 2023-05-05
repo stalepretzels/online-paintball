@@ -265,6 +265,18 @@
             z-index: 0;
         }
 
+        #skinChange {
+            border-radius: 6px;
+            background-size: 50px;
+            background-position: center;
+            z-index: 0;
+            position: absolute;
+            bottom: 41%;
+            right: 61%;
+            width: 50px;
+            height: 50px;
+        }
+
         .center {
             display: flex;
             justify-content: center;
@@ -469,8 +481,7 @@
                 d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
         </svg>
         <div class="centeredContent">
-            <svg id="username" xmlns="http://www.w3.org/2000/svg"
-                onclick="document.getElementById('overlay').style.visibility = 'visible'" width="50" height="50"
+            <svg id="username" xmlns="http://www.w3.org/2000/svg" onclick='ShowOverlay()' width="50" height="50"
                 fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                 <path fill-rule="evenodd"
@@ -501,7 +512,7 @@
             <h2>enter a screen name</h2>
             <form id="login">
                 <input type="text" id="name" autocapitalize="on" autocomplete="off" maxlength="50" minlength="1">
-                <img onclick="ChangeSkin()" id="skin"/>
+                <div onclick="ChangeSkin()" id="skinChange"></div>
                 <input type="submit" value=" Confirm">
             </form>
         </div>
@@ -616,20 +627,31 @@
             }
             return color;
         }
+        function ShowOverlay() {
+            document.getElementById('overlay').style.visibility = 'visible'
+        }
         var skins = new Array;
         skins.push('OKG.png', 'pirate.jpeg', 'robot.jpg', 'crystal.png', 'steampunk.png', 'avocadocat.png', 'car.png', 'galaxy.png', 'clover.png', 'avocadoThing.jpeg')
-        var items = new Array;
-        items.push('bomb.png')
         var user = getCookie("uname");
         var color = getRandomColor();
         var rndInt = Math.floor(Math.random() * skins.length)
         var skin = skins[rndInt]
-        rndInt = Math.floor(Math.random() * items.length)
-        var item = items[rndInt]
+        document.getElementById('skinChange').style.backgroundImage = 'url(' + skin + ')';
         var id = Math.floor(Math.random() * 10000000000000);
         var x = Math.floor(Math.random() * 90);
         var y = Math.floor(Math.random() * 90);
         var connected = false;
+        var SkinCounter = rndInt
+        function ChangeSkin() {
+            SkinCounter++
+            if (SkinCounter == skins.length) {
+                SkinCounter = 0;
+            }
+            skin = skins[SkinCounter]
+            document.getElementById('skinChange').style.backgroundImage = 'url(' + skin + ')';
+            socket.emit('functions', 'disconnect:')
+        }
+
         window.addEventListener('load', function () {
             socket.emit('functions', 'disconnect:')
             connected = true;
@@ -670,7 +692,6 @@
         };
         //functions go here
         function react(x, y, emoji) {
-
             var newReact = document.createElement('h1');
             newReact.style.position = 'absolute'
             newReact.style.left = x++ + '%'
@@ -711,7 +732,7 @@
             document.getElementById(id).style.top = y + '%';
         }
         function activePing() {
-            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + skin + ':' + item + ':' + user);
+            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + skin + ':' + user);
         }
 
         function disconnect() {
@@ -731,7 +752,7 @@
                 document.getElementById(id).remove()
             }
             else if (processedData[0] == 'generateUser') {
-                generateUser(processedData[1], processedData[2], processedData[3], processedData[4], processedData[5], processedData[7])
+                generateUser(processedData[1], processedData[2], processedData[3], processedData[4], processedData[5], processedData[6])
 
             }
             else if (processedData[0] == 'moveClient') {
@@ -796,8 +817,8 @@
             document.cookie = "uname=" + $('#name').val()
             document.getElementById("overlay").style.visibility = "hidden"
             document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
-            document.getElementById('name').value = getCookie("uname");
-            settingsMenu();
+            user = getCookie('uname');
+            socket.emit('functions', 'disconnect:')
         })
         if (user != "") {
             document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
