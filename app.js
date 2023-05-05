@@ -47,8 +47,8 @@ io.on('connection', function (client) {
       console.log("err: blocked message")
     }
     else {
-      client.emit('broad', data);
-      client.broadcast.emit('broad', data);
+        client.emit('broad', data);
+        client.broadcast.emit('broad', data);
     }
   });
   client.on('functions', function (data) {

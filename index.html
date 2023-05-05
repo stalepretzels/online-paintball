@@ -243,6 +243,9 @@
 
         audio {
             outline: none;
+            height: 50px;
+            display: flex;
+  flex-direction: column;
         }
 
         audio::-webkit-media-controls-play-button {
@@ -383,6 +386,7 @@
                 z-index: 0;
             }
         </style>
+
         <div class="emoji-picker">
             <button id="emoji-input">reactions</button>
             <div class="emoji-container">
@@ -630,6 +634,9 @@
         function ShowOverlay() {
             document.getElementById('overlay').style.visibility = 'visible'
         }
+        var rooms = new Array;
+        rooms.push('general', 'games', 'memes', 'polls', 'school', 'politics', 'technology')
+        var room = rooms[0]
         var skins = new Array;
         skins.push('OKG.png', 'pirate.jpeg', 'robot.jpg', 'crystal.png', 'steampunk.png', 'avocadocat.png', 'car.png', 'galaxy.png', 'clover.png', 'avocadoThing.jpeg')
         var user = getCookie("uname");
@@ -659,12 +666,14 @@
         });
         socket.on('broad', function (data) {
             console.log(data)
-            $(`#output`).append(checkMarkdown(data) + '<br/>');
-            var c = 0;
+                $(`#output`).append(checkMarkdown(data) + '<br/>');
+
+                var c = 0;
             while (document.querySelectorAll("a").length > c) {
                 document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
                 c++;
             }
+
         });
         document.onkeydown = function (event) {
             switch (event.key) {
@@ -701,7 +710,7 @@
         }
         function generateUser(x, y, color, id, skin, uname) {
             var newDiv = document.createElement('div');
-            newDiv.id = id;
+            newDiv.id = id
             newDiv.className = 'player'
             newDiv.style.backgroundColor = color;
             newDiv.style.left = x + '%'
@@ -717,6 +726,8 @@
             paragraph.id = 'p:' + id
             paragraph.style.backgroundColor = 'white'
             paragraph.style.borderRadius = '5px'
+            paragraph.style.width = 'max-content'
+            paragraph.style.height = '20px'
             var tst = document.createElement("div");
             tst.style.position = 'absolute'
             tst.style.top = '-50px'
@@ -813,6 +824,7 @@
         });
         $('#login').submit(function (e) {
             e.preventDefault();
+            form.reset();
             console.log($('#name').val())
             document.cookie = "uname=" + $('#name').val()
             document.getElementById("overlay").style.visibility = "hidden"
