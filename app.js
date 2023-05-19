@@ -40,10 +40,7 @@ io.on('connection', function (client) {
     console.log(data);
   });
   client.on('messages', function (data) {
-    var splitData = data.split('<br')
-    var x = splitData.length - 2;
-    var y = splitData[x]
-    if (y.indexOf(">") > ! -1 || y.indexOf("<") > ! -1 || splitData.length > 2) {
+    if (data.indexOf(">") >  -1 || data.indexOf("<") >  -1) {
       console.log("err: blocked message")
     }
     else {

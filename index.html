@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <title>Terra</title>
-    <link rel="icon" type="image/x-icon" href="/favico.png">
+    <title>Paintball</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.png">
     <style>
         html {
             overflow: hidden;
@@ -16,8 +16,8 @@
         }
 
         body {
-            background-image: url('/bg.jpeg');
-            background-size: 100%;
+            background-image: url('/bg.png');
+            background-repeat: repeat;
         }
 
         input:focus,
@@ -35,26 +35,30 @@
         }
 
         #output {
-            overflow-x: hidden;
-            overflow-y: scroll;
+            overflow-x: scroll;
+            overflow-y:scroll;
             z-index: -2;
-            max-height: 90%;
-            height: 90%;
+            max-height: 100%;
+            position: absolute;
+            visibility: hidden;
             border-radius: 2.5px;
             border-color: rgb(75, 75, 75);
             border-style: solid;
             border-width: 2px;
+            width: 50%;
+            left: 0px;
         }
 
         input {
             border-radius: 5px;
-            color: rgb(0, 105, 5);
+            color: rgb(35, 35, 35);
             background-color: rgba(211, 211, 211, 0.583);
         }
 
         #output {
+            top: 50px;
             z-index: -2;
-            color: rgb(0, 105, 5);
+            color: rgb(35, 35, 35);
             border-radius: 15px;
             background-color: rgba(211, 211, 211, 0.583);
         }
@@ -70,7 +74,7 @@
         }
 
         a {
-            color: rgb(0, 105, 5);
+            color: rgb(35, 35, 35);
         }
 
         #overlay {
@@ -106,13 +110,13 @@
             height: fit-content;
             background: transparent;
             font-size: medium;
-            color: rgb(0, 105, 5);
+            color: rgb(35, 35, 35);
             border: 0px;
             resize: none;
         }
 
         textarea::placeholder {
-            color: rgb(0, 105, 5);
+            color: rgb(35, 35, 35);
             height: fit-content;
         }
 
@@ -165,13 +169,6 @@
             z-index: 2;
         }
 
-        svg {
-            color: rgb(0, 105, 5);
-        }
-
-        svg:hover {
-            color: rgb(0, 105, 5);
-        }
     </style>
     <style id="menuOpen">
         body {
@@ -268,17 +265,6 @@
             z-index: 0;
         }
 
-        #skinChange {
-            border-radius: 6px;
-            background-size: 50px;
-            background-position: center;
-            z-index: 0;
-            position: absolute;
-            bottom: 41%;
-            right: 61%;
-            width: 50px;
-            height: 50px;
-        }
 
         .center {
             display: flex;
@@ -295,7 +281,7 @@
             width: 30%;
             height: 30%;
             margin: auto;
-            background-color: green;
+            background-color: rgb(35, 35, 35);
         }
 
         #emojiPickerContainer {
@@ -324,7 +310,6 @@
 </head>
 
 <body oncontextmenu="return false">
-    <div id='emojiPickerContainer'>
         <style>
             .container {
                 position: relative;
@@ -385,97 +370,12 @@
             h1 {
                 z-index: 0;
             }
+            svg {
+                color: rgb(35, 35, 35);
+            }
         </style>
 
-        <div class="emoji-picker">
-            <button id="emoji-input">reactions</button>
-            <div class="emoji-container">
-                <div class="emoji" onclick="sendEmoji('😀')">😀</div>
-                <div class="emoji" onclick="sendEmoji('😃')">😃</div>
-                <div class="emoji" onclick="sendEmoji('😄')">😄</div>
-                <div class="emoji" onclick="sendEmoji('😁')">😁</div>
-                <div class="emoji" onclick="sendEmoji('😆')">😆</div>
-                <div class="emoji" onclick="sendEmoji('😅')">😅</div>
-                <div class="emoji" onclick="sendEmoji('😂')">😂</div>
-                <div class="emoji" onclick="sendEmoji('🤣')">🤣</div>
-                <div class="emoji" onclick="sendEmoji('😊')">😊</div>
-                <div class="emoji" onclick="sendEmoji('😇')">😇</div>
-                <div class="emoji" onclick="sendEmoji('🙂')">🙂</div>
-                <div class="emoji" onclick="sendEmoji('🙃')">🙃</div>
-                <div class="emoji" onclick="sendEmoji('😉')">😉</div>
-                <div class="emoji" onclick="sendEmoji('😌')">😌</div>
-                <div class="emoji" onclick="sendEmoji('😍')">😍</div>
-                <div class="emoji" onclick="sendEmoji('🥰')">🥰</div>
-                <div class="emoji" onclick="sendEmoji('😘')">😘</div>
-                <div class="emoji" onclick="sendEmoji('😗')">😗</div>
-                <div class="emoji" onclick="sendEmoji('😚')">😚</div>
-                <div class="emoji" onclick="sendEmoji('😙')">😙</div>
-                <div class="emoji" onclick="sendEmoji('😋')">😋</div>
-                <div class="emoji" onclick="sendEmoji('😛')">😛</div>
-                <div class="emoji" onclick="sendEmoji('😜')">😜</div>
-                <div class="emoji" onclick="sendEmoji('🤪')">🤪</div>
-                <div class="emoji" onclick="sendEmoji('😝')">😝</div>
-                <div class="emoji" onclick="sendEmoji('🤑')">🤑</div>
-                <div class="emoji" onclick="sendEmoji('🤗')">🤗</div>
-                <div class="emoji" onclick="sendEmoji('🤔')">🤔</div>
-                <div class="emoji" onclick="sendEmoji('🤨')">🤨</div>
-                <div class="emoji" onclick="sendEmoji('😐')">😐</div>
-                <div class="emoji" onclick="sendEmoji('😑')">😑</div>
-                <div class="emoji" onclick="sendEmoji('😶')">😶</div>
-                <div class="emoji" onclick="sendEmoji('😏')">😏</div>
-                <div class="emoji" onclick="sendEmoji('😒')">😒</div>
-                <div class="emoji" onclick="sendEmoji('🙄')">🙄</div>
-                <div class="emoji" onclick="sendEmoji('😬')">😬</div>
-                <div class="emoji" onclick="sendEmoji('🤥')">🤥</div>
-                <div class="emoji" onclick="sendEmoji('😌')">😌</div>
-                <div class="emoji" onclick="sendEmoji('🫠')">🫠</div>
-                <div class="emoji" onclick="sendEmoji('😔')">😔</div>
-                <div class="emoji" onclick="sendEmoji('😪')">😪</div>
-                <div class="emoji" onclick="sendEmoji('😴')">😴</div>
-                <div class="emoji" onclick="sendEmoji('😷')">😷</div>
-                <div class="emoji" onclick="sendEmoji('🤒')">🤒</div>
-                <div class="emoji" onclick="sendEmoji('🤕')">🤕</div>
-                <div class="emoji" onclick="sendEmoji('🤢')">🤢</div>
-                <div class="emoji" onclick="sendEmoji('🤮')">🤮</div>
-                <div class="emoji" onclick="sendEmoji('🤧')">🤧</div>
-                <div class="emoji" onclick="sendEmoji('🥶')">🥶</div>
-                <div class="emoji" onclick="sendEmoji('🥴')">🥴</div>
-                <div class="emoji" onclick="sendEmoji('😵')">😵</div>
-                <div class="emoji" onclick="sendEmoji('🤯')">🤯</div>
-                <div class="emoji" onclick="sendEmoji('🤠')">🤠</div>
-                <div class="emoji" onclick="sendEmoji('🥳')">🥳</div>
-                <div class="emoji" onclick="sendEmoji('😎')">😎</div>
-                <div class="emoji" onclick="sendEmoji('🤓')">🤓</div>
-                <div class="emoji" onclick="sendEmoji('🧐')">🧐</div>
-                <div class="emoji" onclick="sendEmoji('😕')">😕</div>
-                <div class="emoji" onclick="sendEmoji('😟')">😟</div>
-                <div class="emoji" onclick="sendEmoji('🙁')">🙁</div>
-                <div class="emoji" onclick="sendEmoji('☹️')">☹️</div>
-                <div class="emoji" onclick="sendEmoji('😮')">😮</div>
-                <div class="emoji" onclick="sendEmoji('😯')">😯</div>
-                <div class="emoji" onclick="sendEmoji('😲')">😲</div>
-                <div class="emoji" onclick="sendEmoji('☠️')">☠️</div>
-                <div class="emoji" onclick="sendEmoji('🤕')">🤕</div>
-                <div class="emoji" onclick="sendEmoji('💩')">💩</div>
-                <div class="emoji" onclick="sendEmoji('👻')">👻</div>
-                <div class="emoji" onclick="sendEmoji('👽')">👽</div>
-                <div class="emoji" onclick="sendEmoji('🤖')">🤖</div>
-                <div class="emoji" onclick="sendEmoji('🎃')">🎃</div>
-                <div class="emoji" onclick="sendEmoji('🎅')">🎅</div>
-                <div class="emoji" onclick="sendEmoji('😼')">😼</div>
-                <div class="emoji" onclick="sendEmoji('😹')">😹</div>
-                <div class="emoji" onclick="sendEmoji('🙀')">🙀</div>
-                <div class="emoji" onclick="sendEmoji('😾')">😾</div>
-                <div class="emoji" onclick="sendEmoji('😿')">😿</div>
-                <div class="emoji" onclick="sendEmoji('😻')">😻</div>
-                <div class="emoji" onclick="sendEmoji('😺')">😺</div>
-                <div class="emoji" onclick="sendEmoji('😸')">😸</div>
-                <div class="emoji" onclick="sendEmoji('😽')">😽</div>
-            </div>
-        </div>
-
-    </div>
-    <div id="backgroundOverlay"></div>
+   
     <div id="output"></div>
     <div id="settingsMenu">
         <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="X"
@@ -516,7 +416,6 @@
             <h2>enter a screen name</h2>
             <form id="login">
                 <input type="text" id="name" autocapitalize="on" autocomplete="off" maxlength="50" minlength="1">
-                <div onclick="ChangeSkin()" id="skinChange"></div>
                 <input type="submit" value=" Confirm">
             </form>
         </div>
@@ -569,9 +468,6 @@
     </div>
     <form id="form" id="chat_form">
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" minlength="1">
-        <input id="chat_base" type="text" autocapitalize="on" autocomplete="off" minlength="1"
-            style="visibility: hidden;">
-        <input id="chat_input_uploads" onchange="getBase64(this[0])" type="file" accept="image/*, audio/*">
         <input type="submit" value="Send">
     </form>
     <script src="/jquery/dist/jquery.js"></script>
@@ -624,40 +520,21 @@
         console.log(getCookie("uname"))
         var socket = io.connect();
         function getRandomColor() {
-            var letters = '0123456789ABCDEF';
+            var letters = new Array;
+            letters.push('ff0000', '0000cc')
             var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
+            color += letters[Math.floor(Math.random() * 2)];
             return color;
         }
         function ShowOverlay() {
             document.getElementById('overlay').style.visibility = 'visible'
         }
-        var rooms = new Array;
-        rooms.push('general', 'games', 'memes', 'polls', 'school', 'politics', 'technology')
-        var room = rooms[0]
-        var skins = new Array;
-        skins.push('OKG.png', 'pirate.jpeg', 'robot.jpg', 'crystal.png', 'steampunk.png', 'avocadocat.png', 'car.png', 'galaxy.png', 'clover.png', 'avocadoThing.jpeg')
         var user = getCookie("uname");
         var color = getRandomColor();
-        var rndInt = Math.floor(Math.random() * skins.length)
-        var skin = skins[rndInt]
-        document.getElementById('skinChange').style.backgroundImage = 'url(' + skin + ')';
         var id = Math.floor(Math.random() * 10000000000000);
         var x = Math.floor(Math.random() * 90);
         var y = Math.floor(Math.random() * 90);
         var connected = false;
-        var SkinCounter = rndInt
-        function ChangeSkin() {
-            SkinCounter++
-            if (SkinCounter == skins.length) {
-                SkinCounter = 0;
-            }
-            skin = skins[SkinCounter]
-            document.getElementById('skinChange').style.backgroundImage = 'url(' + skin + ')';
-            socket.emit('functions', 'disconnect:')
-        }
 
         window.addEventListener('load', function () {
             socket.emit('functions', 'disconnect:')
@@ -666,8 +543,8 @@
         });
         socket.on('broad', function (data) {
             console.log(data)
-            $(`#output`).append(checkMarkdown(data) + '<br/>');
-
+            document.getElementById('output').innerHTML=checkMarkdown(data) + '<br/>'+document.getElementById('output').innerHTML;
+            document.getElementById('output').style.visibility='visible';
             var c = 0;
             while (document.querySelectorAll("a").length > c) {
                 document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
@@ -708,14 +585,13 @@
             newReact.innerText = emoji
             document.body.appendChild(newReact)
         }
-        function generateUser(x, y, color, id, skin, uname) {
+        function generateUser(x, y, color, id, uname) {
             var newDiv = document.createElement('div');
             newDiv.id = id
             newDiv.className = 'player'
             newDiv.style.backgroundColor = color;
             newDiv.style.left = x + '%'
             newDiv.style.top = y + '%'
-            newDiv.style.backgroundImage = 'url(' + skin + ')'
             newDiv.style.width = '50px'
             newDiv.style.height = '50px'
             newDiv.style.position = 'absolute'
@@ -743,7 +619,7 @@
             document.getElementById(id).style.top = y + '%';
         }
         function activePing() {
-            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + skin + ':' + user);
+            socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + user);
         }
 
         function disconnect() {
@@ -763,7 +639,7 @@
                 document.getElementById(id).remove()
             }
             else if (processedData[0] == 'generateUser') {
-                generateUser(processedData[1], processedData[2], processedData[3], processedData[4], processedData[5], processedData[6])
+                generateUser(processedData[1], processedData[2], processedData[3], processedData[4], processedData[5])
 
             }
             else if (processedData[0] == 'moveClient') {
@@ -788,39 +664,10 @@
         $('#form').submit(function (e) {
             e.preventDefault();
             var message = $('#chat_input').val();
-            var has_selected_file = $.trim($('input[type=file]').val());
-            const file = input.files[0];
-            const reader = new FileReader();
-            if (has_selected_file != "") {
-                reader.addEventListener('load', () => {
-                    const base64String = reader.result;
-                    if (base64String.split('/')[0] == 'data:image') {
-                        socket.emit('messages', '@' + user + ': ' + message + '<br/>' + '<img src="' + base64String + '"/>');
-                    }
-                    else if (base64String.split('/')[0] == 'data:audio') {
-                        socket.emit('messages', '@' + user + ': ' + message + '<br/>' + '<audio controls src="' + base64String + '"/>');
-                    }
-
-                });
-                reader.readAsDataURL(file);
-            }
-            else {
                 if (message != "") {
-                    socket.emit('messages', '@' + user + ': ' + message + '<br style="display: none;"/>')
+                    socket.emit('messages', '@' + user + ': ' + message)
                 }
-            }
             form.reset()
-        });
-        function sendEmoji(emoji) {
-            emojiContainer.classList.remove('visible');
-            socket.emit('functions', 'reaction:' + x + ':' + y + ':' + emoji)
-        }
-        // Get the input element and emoji container
-        const inputElement = document.querySelector('#emoji-input');
-        const emojiContainer = document.querySelector('.emoji-container');
-        // Add event listeners to show/hide the emoji container
-        inputElement.addEventListener('focusin', () => {
-            emojiContainer.classList.add('visible');
         });
         $('#login').submit(function (e) {
             e.preventDefault();
