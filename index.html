@@ -36,7 +36,7 @@
 
         #output {
             overflow-x: scroll;
-            overflow-y:scroll;
+            overflow-y: scroll;
             z-index: -2;
             max-height: 100%;
             position: absolute;
@@ -168,7 +168,6 @@
             visibility: hidden;
             z-index: 2;
         }
-
     </style>
     <style id="menuOpen">
         body {
@@ -190,19 +189,6 @@
             display: grid;
         }
 
-        #mode {
-            font-size: 2em;
-            display: inline-block;
-            position: absolute;
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-            left: 0;
-            right: 0;
-            margin: auto;
-            text-align: center;
-        }
 
         #username {
             font-size: 2em;
@@ -213,9 +199,23 @@
             -ms-transform: translateY(-50%);
             transform: translateY(-50%);
             left: 0;
-            right: -75px;
+            right: -50px;
             margin: auto;
             text-align: center;
+        }
+
+        .paint {
+            animation: flip1 3s 1;
+        }
+
+        @keyframes flip1 {
+            0% {
+                visibility: visible;
+            }
+
+            100% {
+                visibility: hidden;
+            }
         }
 
         #markdown {
@@ -230,6 +230,14 @@
             right: 75px;
             margin: auto;
             text-align: center;
+        }
+
+        .paint {
+            background-size: 65px;
+            background-repeat: no-repeat;
+            overflow: visible;
+            background-position: center;
+
         }
 
         audio::-webkit-media-controls-play-button,
@@ -251,7 +259,7 @@
 
         #X {
             position: absolute;
-            left: 5;
+            left: 0;
             top: 5;
         }
 
@@ -310,72 +318,74 @@
 </head>
 
 <body oncontextmenu="return false">
-        <style>
-            .container {
-                position: relative;
-                /* Add position property */
-                width: 80%;
-                margin: auto;
-            }
+    <style>
+        .container {
+            position: relative;
+            /* Add position property */
+            width: 80%;
+            margin: auto;
+        }
 
-            #emoji-input {
-                border-style: solid;
-                border-color: #3a3a3a;
-                border-radius: 50px;
-                width: 250px;
-                height: 50px;
-                margin: 20px;
-                font-size: 18px;
-                padding-left: 10px;
-                position: absolute;
-                background-color: rgba(211, 211, 211, 0.583);
-                bottom: -19px;
-                left: 75%;
-                z-index: 1;
+        #emoji-input {
+            border-style: solid;
+            border-color: #3a3a3a;
+            border-radius: 50px;
+            width: 250px;
+            height: 50px;
+            margin: 20px;
+            font-size: 18px;
+            padding-left: 10px;
+            position: absolute;
+            background-color: rgba(211, 211, 211, 0.583);
+            bottom: -19px;
+            left: 75%;
+            z-index: 1;
 
-                /* Add position property */
-            }
+            /* Add position property */
+        }
 
-            .emoji-container {
-                position: absolute;
-                bottom: 70px;
-                right: 50px;
-                visibility: hidden;
-                background-color: rgba(130, 130, 130, 0.467);
-                padding: 5px;
-                display: flex;
-                flex-wrap: wrap;
-                overflow-x: wrap;
-                overflow-y: scroll;
-                right: 0px;
-                z-index: 1;
-                border-radius: 10px;
-            }
+        .emoji-container {
+            position: absolute;
+            bottom: 70px;
+            right: 50px;
+            visibility: hidden;
+            background-color: rgba(130, 130, 130, 0.467);
+            padding: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            overflow-x: wrap;
+            overflow-y: scroll;
+            right: 0px;
+            z-index: 1;
+            border-radius: 10px;
+        }
 
-            .emoji-container.visible {
-                visibility: visible;
-            }
+        .emoji-container.visible {
+            visibility: visible;
+        }
 
-            .emoji {
-                display: inline-block;
-                width: 30px;
-                height: 30px;
-                margin-right: 10px;
-                margin-top: 10px;
-                font-size: 20px;
-                text-align: center;
-                cursor: pointer;
-            }
 
-            h1 {
-                z-index: 0;
-            }
-            svg {
-                color: rgb(35, 35, 35);
-            }
-        </style>
+        .emoji {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            margin-top: 10px;
+            font-size: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
 
-   
+        h1 {
+            z-index: 0;
+        }
+
+        svg {
+            color: rgb(35, 35, 35);
+        }
+    </style>
+
+
     <div id="output"></div>
     <div id="settingsMenu">
         <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" width="25" height="25" id="X"
@@ -391,17 +401,7 @@
                 <path fill-rule="evenodd"
                     d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
             </svg>
-            <svg id="markdown" onclick="document.getElementById('mdTable').style.visibility = 'visible'"
-                xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-markdown"
-                viewBox="0 0 16 16">
-                <path
-                    d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z" />
-                <path fill-rule="evenodd"
-                    d="M9.146 8.146a.5.5 0 0 1 .708 0L11.5 9.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708z" />
-                <path fill-rule="evenodd" d="M11.5 5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z" />
-                <path
-                    d="M3.56 11V7.01h.056l1.428 3.239h.774l1.42-3.24h.056V11h1.073V5.001h-1.2l-1.71 3.894h-.039l-1.71-3.894H2.5V11h1.06z" />
-            </svg>
+
         </div>
     </div>
     <svg onclick="settingsMenu()" xmlns="http://www.w3.org/2000/svg" id="settingsBtn" width="50" height="50"
@@ -470,8 +470,10 @@
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" minlength="1">
         <input type="submit" value="Send">
     </form>
+
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <div id="pb"></div>
     <script>
         var settingsOpen = true;
         function settingsMenu() {
@@ -502,6 +504,7 @@
                 settingsOpen = true;
             }
         }
+
         function getCookie(cname) {
             let name = cname + "=";
             let decodedCookie = decodeURIComponent(document.cookie);
@@ -522,6 +525,7 @@
         function getRandomColor() {
             var letters = new Array;
             letters.push('ff0000', '0000cc')
+            //ff0000: red, 0000cc: blue
             var color = '#';
             color += letters[Math.floor(Math.random() * 2)];
             return color;
@@ -540,11 +544,12 @@
             socket.emit('functions', 'disconnect:')
             connected = true;
             console.log('client has sucessfully connected to socket');
+
         });
         socket.on('broad', function (data) {
             console.log(data)
-            document.getElementById('output').innerHTML=checkMarkdown(data) + '<br/>'+document.getElementById('output').innerHTML;
-            document.getElementById('output').style.visibility='visible';
+            document.getElementById('output').innerHTML = data + '<br/>' + document.getElementById('output').innerHTML;
+            document.getElementById('output').style.visibility = 'visible';
             var c = 0;
             while (document.querySelectorAll("a").length > c) {
                 document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
@@ -552,39 +557,50 @@
             }
 
         });
+        var dirArrX = new Array;
+        dirArrX.push(10, -10, 0)
+        var dirArrY = new Array;
+        dirArrY.push(10, -10, 0)
+        var px = 0;
+        var py = 2;
         document.onkeydown = function (event) {
             switch (event.key) {
                 case 'ArrowLeft':
                 case 'a':
+                    px = 1;
+                    py = 2;
                     socket.emit('functions', "moveClient:" + (x - 1) + ':' + y + ':' + id);
                     x -= 1;
                     break;
                 case 'ArrowUp':
                 case 'w':
+                    px = 2;
+                    py = 1;
                     socket.emit('functions', "moveClient:" + x + ':' + (y - 1) + ':' + id);
                     y -= 1;
                     break;
                 case 'ArrowRight':
                 case 'd':
+                    px = 0;
+                    py = 2;
                     socket.emit('functions', "moveClient:" + (x + 1) + ':' + y + ':' + id);
                     x += 1;
                     break;
                 case 'ArrowDown':
                 case 's':
+                    px = 2;
+                    py = 0;
                     socket.emit('functions', "moveClient:" + x + ':' + (y + 1) + ':' + id);
                     y += 1;
                     break;
+                case " ":
+                    socket.emit('functions', "genPaint:" + (x + dirArrX[px]) + ':' + (y + dirArrY[py]) + ':' + color + ":" + id);
+                    break;
+
             }
         };
         //functions go here
-        function react(x, y, emoji) {
-            var newReact = document.createElement('h1');
-            newReact.style.position = 'absolute'
-            newReact.style.left = x++ + '%'
-            newReact.style.top = y - 3 + '%'
-            newReact.innerText = emoji
-            document.body.appendChild(newReact)
-        }
+
         function generateUser(x, y, color, id, uname) {
             var newDiv = document.createElement('div');
             newDiv.id = id
@@ -613,6 +629,29 @@
             newDiv.appendChild(tst)
             newDiv.appendChild(paragraph)
             document.body.appendChild(newDiv);
+        }
+        function generatePaintball(x, y, color, id) {
+            var newDiv = document.createElement('div');
+            newDiv.id = id + "paint"
+            newDiv.className = 'paint'
+            newDiv.style.left = x + '%'
+            newDiv.style.top = y + '%'
+            newDiv.style.width = '50px'
+            newDiv.style.height = '50px'
+            newDiv.style.position = 'absolute'
+            newDiv.addEventListener("animationend", function () {
+                this.remove();
+            })
+            if (document.querySelectorAll('.paint').length > 50) {
+                $('.paint').remove();
+            }
+            var img = new Image(); //create a new image object
+            img.onload = function () {
+                newDiv.style.backgroundImage = "url(" + this.src + ")"; //set the background image
+            };
+            img.src = color.split('#')[1] + ".png"; //set the source of the image
+
+            document.getElementById('pb').appendChild(newDiv);
         }
         function moveClient(x, y, id) {
             document.getElementById(id).style.left = x + '%';
@@ -652,8 +691,8 @@
                 disconnect()
                 activePing()
             }
-            else if (processedData[0] == 'reaction') {
-                react(processedData[1], processedData[2], processedData[3])
+            else if (processedData[0] == 'genPaint') {
+                generatePaintball(processedData[1], processedData[2], processedData[3], processedData[4]);
             }
             else {
                 console.log('no')
@@ -664,9 +703,9 @@
         $('#form').submit(function (e) {
             e.preventDefault();
             var message = $('#chat_input').val();
-                if (message != "") {
-                    socket.emit('messages', '@' + user + ': ' + message)
-                }
+            if (message != "") {
+                socket.emit('messages', '@' + user + ': ' + message)
+            }
             form.reset()
         });
         $('#login').submit(function (e) {
@@ -682,32 +721,6 @@
         if (user != "") {
             document.getElementById("menuOpen").setAttribute('media', "max-width: 1px")
             document.getElementById("overlay").style.visibility = "hidden"
-        }
-        function checkMarkdown(data) {
-            var dataSplit = data.split("\\")
-            var identifiers = new Array;
-            identifiers.push("bld", "~bld~", "itl", "~itl~", "mrk", "~mrk~", "uln", "~uln~", "str", "~str~", "lnk", "~lnk~", "img", "~img~")
-            var tags = new Array;
-            tags.push("<b>", "</b>", "<i>", "</i>", "<mark>", "</mark>", "<u>", "</u>", "<s>", "</s>", "<a href='", "'></a>", "<img src='", "'/>")
-            var c = 1;
-            var c2 = 0;
-            var result
-            while (c < dataSplit.length) {
-                while (c2 < identifiers.length) {
-                    if (dataSplit[c] == identifiers[c2]) {
-                        dataSplit[c] = tags[c2]
-                    }
-                    c2++;
-                }
-                c2 = 0;
-                c++;
-            }
-            c = 0;
-            while (c < dataSplit.length) {
-                result += dataSplit[c]
-                c++;
-            }
-            return (result.split("undefined")[1])
         }
 
     </script>

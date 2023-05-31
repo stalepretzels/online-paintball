@@ -2,9 +2,11 @@
   "name": "socket-app",
   "version": "1.0.0",
   "description": "a",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon",
+    "debug": "DEBUG=* nodemon"
   },
   "author": "me",
   "license": "ISC",
