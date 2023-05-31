@@ -1,5 +1,5 @@
-# Paintball
-
+# Online Paintball Game
+---
 This is an online paintball game built using Node.js and HTML. Players can engage in virtual paintball battles with each other.
 
 ## Features
@@ -30,8 +30,8 @@ To run the game locally, follow these steps:
 
 1. Upon accessing the game, you will join the game lobby.
 2. Once in the lobby, you can see other players who have joined.
-3. Use the arrow keys or WASD to move your character.
-4. Aim with the mouse and left-click to shoot paintballs at opposing players.
+3. Use the arrow keys or WASD to move your character. The last direction you moved will determine your aim.
+4. Press the space bar to fire paintballs in the direction you are aiming.
 5. Your objective is to hit opposing players while avoiding being hit yourself.
 6. Communicate with other players using the chat feature.
 7. Enjoy the game and have fun!
@@ -49,7 +49,3 @@ Contributions are welcome! If you would like to contribute to the game, please f
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
----
-
-Feel free to customize this Markdown file further based on your specific game's features and requirements. Good luck with your online paintball game project!
