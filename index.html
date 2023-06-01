@@ -6,13 +6,13 @@
     <link rel="icon" type="image/x-icon" href="/favicon.png">
     <style>
         html {
-            overflow: hidden;
+
             height: 100%;
         }
 
         body {
             height: 100%;
-            overflow: auto;
+            overflow: hidden;
         }
 
         body {
@@ -35,18 +35,18 @@
         }
 
         #output {
-            overflow-x: scroll;
-            overflow-y: scroll;
-            z-index: -2;
-            max-height: 100%;
+            overflow: hidden;
             position: absolute;
-            visibility: hidden;
             border-radius: 2.5px;
             border-color: rgb(75, 75, 75);
             border-style: solid;
             border-width: 2px;
             width: 50%;
             left: 0px;
+            top: 50px;
+            color: rgb(35, 35, 35);
+            border-radius: 15px;
+            background-color: rgba(211, 211, 211, 0.583);
         }
 
         input {
@@ -55,13 +55,6 @@
             background-color: rgba(211, 211, 211, 0.583);
         }
 
-        #output {
-            top: 50px;
-            z-index: -2;
-            color: rgb(35, 35, 35);
-            border-radius: 15px;
-            background-color: rgba(211, 211, 211, 0.583);
-        }
 
         #backgroundOverlay {
             position: absolute;
@@ -237,7 +230,7 @@
             background-repeat: no-repeat;
             overflow: visible;
             background-position: center;
-
+            z-index: 1;
         }
 
         audio::-webkit-media-controls-play-button,
@@ -298,26 +291,11 @@
             align-items: center;
         }
     </style>
-    <script>
-        function getCookie(cname) {
-            let name = cname + "=";
-            let decodedCookie = decodeURIComponent(document.cookie);
-            let ca = decodedCookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                }
-                if (c.indexOf(name) == 0) {
-                    return c.substring(name.length, c.length);
-                }
-            }
-            return "";
-        }
-    </script>
+
 </head>
 
 <body oncontextmenu="return false">
+    <div id="pb"></div>
     <style>
         .container {
             position: relative;
@@ -427,44 +405,7 @@
             <path
                 d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
         </svg>
-        <table class="dead_center">
-            <tr>
-                <th>Identifier</th>
-                <th>Result</th>
-            </tr>
-            <tr>
-                <td>\bld\</td>
-                <td><b>bold</b></td>
-            </tr>
-            <tr>
-                <td>\itl\</td>
-                <td><i>italics</i></td>
-            </tr>
-            <tr>
-                <td>\lnk\</td>
-                <td><a href="link">link</a></td>
-            </tr>
-            <tr>
-                <td>\img\</td>
-                <td><img src="AAAAAAAAAAAAAAA" /> image</td>
-            </tr>
-            <tr>
-                <td>\uln\</td>
-                <td><u>underline</u></td>
-            </tr>
-            <tr>
-                <td>\str\</td>
-                <td><s>strikethrough</s></td>
-            </tr>
-            <tr>
-                <th>Begin</th>
-                <th>End</th>
-            </tr>
-            <tr>
-                <td>\[identifier]\</td>
-                <td>\~[identifier]~\</td>
-            </tr>
-        </table>
+
     </div>
     <form id="form" id="chat_form">
         <input id="chat_input" type="text" autocapitalize="on" autocomplete="off" minlength="1">
@@ -473,7 +414,7 @@
 
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <div id="pb"></div>
+
     <script>
         var settingsOpen = true;
         function settingsMenu() {
@@ -538,6 +479,9 @@
         var id = Math.floor(Math.random() * 10000000000000);
         var x = Math.floor(Math.random() * 90);
         var y = Math.floor(Math.random() * 90);
+        let spawn = new Array;
+        spawn.push(x, y)
+        console.log(spawn)
         var connected = false;
 
         window.addEventListener('load', function () {
@@ -548,15 +492,47 @@
         });
         socket.on('broad', function (data) {
             console.log(data)
-            document.getElementById('output').innerHTML = data + '<br/>' + document.getElementById('output').innerHTML;
-            document.getElementById('output').style.visibility = 'visible';
-            var c = 0;
-            while (document.querySelectorAll("a").length > c) {
-                document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
-                c++;
+            if (data.indexOf(">") > -1 || data.indexOf("<") > -1) {
+                console.log('eeeeeeeeeeeeeee')
             }
-
+            else {
+                document.getElementById('output').innerHTML = data + '<br/>' + document.getElementById('output').innerHTML;
+                document.getElementById('output').style.visibility = 'visible';
+                var c = 0;
+                while (document.querySelectorAll("a").length > c) {
+                    document.querySelectorAll("a")[c].append(document.querySelectorAll("a")[c].getAttribute("href"));
+                    c++;
+                }
+            }
         });
+        function rgbToHex(r, g, b) {
+            return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
+        }
+        function fullHex(str) {
+            const theText = str
+            var str = theText.split("rgb(").join('')
+            str = str.split(")").join('')
+            console.log(str)
+            const strSplit = str.split(',')
+            return (rgbToHex(strSplit[0], strSplit[1], strSplit[2]));
+        }
+        function collide(div1ID, div2) {
+            const domRect1 = document.getElementById(div1ID).getBoundingClientRect();
+            const domRect2 = div2.getBoundingClientRect();
+            const xy = !(
+                domRect1.top > domRect2.bottom ||
+                domRect1.right < domRect2.left ||
+                domRect1.bottom < domRect2.top ||
+                domRect1.left > domRect2.right
+            )
+            var Split = div2.style.backgroundImage.split('/')[3].split('.')[0]
+            if (xy == true && Split != fullHex(document.getElementById(div1ID).style.backgroundColor).split('#')[1]) {
+                x = spawn[0]
+                y = spawn[1]
+                socket.emit('functions', "moveClient:" + x + ':' + y + ':' + div1ID);
+                return xy;
+            }
+        }
         var dirArrX = new Array;
         dirArrX.push(10, -10, 0)
         var dirArrY = new Array;
@@ -564,6 +540,13 @@
         var px = 0;
         var py = 2;
         document.onkeydown = function (event) {
+            var t = 0;
+            while (t < document.querySelectorAll('.paint').length) {
+                if (collide(id, document.querySelectorAll('.paint')[t]) == true) {
+                    console.log('paint?')
+                }
+                t++;
+            }
             switch (event.key) {
                 case 'ArrowLeft':
                 case 'a':
@@ -600,7 +583,6 @@
             }
         };
         //functions go here
-
         function generateUser(x, y, color, id, uname) {
             var newDiv = document.createElement('div');
             newDiv.id = id
@@ -630,6 +612,7 @@
             newDiv.appendChild(paragraph)
             document.body.appendChild(newDiv);
         }
+        var pbid = id;
         function generatePaintball(x, y, color, id) {
             var newDiv = document.createElement('div');
             newDiv.id = id + "paint"
@@ -652,10 +635,19 @@
             img.src = color.split('#')[1] + ".png"; //set the source of the image
 
             document.getElementById('pb').appendChild(newDiv);
+            var t = 0;
+            while (t < document.querySelectorAll('.paint').length) {
+                if (collide(pbid, document.querySelectorAll('.paint')[t]) == true) {
+                    console.log('paint?')
+                }
+                t++;
+            }
         }
         function moveClient(x, y, id) {
             document.getElementById(id).style.left = x + '%';
             document.getElementById(id).style.top = y + '%';
+            var t = 0;
+            
         }
         function activePing() {
             socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + user);

@@ -40,13 +40,9 @@ io.on('connection', function (client) {
     console.log(data);
   });
   client.on('messages', function (data) {
-    if (data.indexOf(">") >  -1 || data.indexOf("<") >  -1) {
-      console.log("err: blocked message")
-    }
-    else {
         client.emit('broad', data);
         client.broadcast.emit('broad', data);
-    }
+    
   });
   client.on('functions', function (data) {
     client.emit('functions', data);
@@ -61,5 +57,5 @@ io.on('connection', function (client) {
 });
 
 
-server.listen(6942);
+server.listen(8080);
 

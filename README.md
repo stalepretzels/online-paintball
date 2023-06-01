@@ -23,8 +23,8 @@ To run the game locally, follow these steps:
 1. Clone the repository: `git clone https://github.com/your-username/paintball-game.git`
 2. Navigate to the project directory: `cd paintball-game`
 3. Install dependencies: `npm install`
-4. Start the server: `node server.js`
-5. Open your web browser and go to `http://localhost:3000` to access the game.
+4. Start the server: `node app.js`
+5. Open your web browser and go to `http://localhost:8080` to access the game.
 
 ## Usage
 
