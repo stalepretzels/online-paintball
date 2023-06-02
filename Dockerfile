@@ -6,5 +6,5 @@ COPY . /dist
 
 RUN npm install
 
-EXPOSE 6942/tcp
+EXPOSE 8080/tcp
 CMD ["node", "app.js"]
