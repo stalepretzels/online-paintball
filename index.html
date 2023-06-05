@@ -273,6 +273,19 @@
             align-items: center;
         }
 
+        #scope {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 4;
+            width: 40px;
+            height: 40px;
+            background-color: #3a3a3a51;
+            border-style: inset;
+            border-color: red;
+            border-width: 5px;
+        }
+
         .dead_center {
             position: absolute;
             top: 0;
@@ -294,7 +307,7 @@
 
 </head>
 
-<body oncontextmenu="return false">
+<body>
     <div id="pb"></div>
     <style>
         .container {
@@ -414,7 +427,7 @@
 
     <script src="/jquery/dist/jquery.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-
+    <div id="scope"></div>
     <script>
         var settingsOpen = true;
         function settingsMenu() {
@@ -466,7 +479,6 @@
         function getRandomColor() {
             var letters = new Array;
             letters.push('ff0000', '0000cc')
-            //ff0000: red, 0000cc: blue
             var color = '#';
             color += letters[Math.floor(Math.random() * 2)];
             return color;
@@ -493,7 +505,7 @@
         socket.on('broad', function (data) {
             console.log(data)
             if (data.indexOf(">") > -1 || data.indexOf("<") > -1) {
-                console.log('eeeeeeeeeeeeeee')
+                console.log('frogur5ot9eu5htou3h4otuh3ou4hrt3tt5uiyhrgtfgcghyuji8y67t5r4ewsdxfgvbhjnkiuy76tgrfdsxvbhgtyghhhbhvgbvhgbgyubhjuyhuy')
             }
             else {
                 document.getElementById('output').innerHTML = data + '<br/>' + document.getElementById('output').innerHTML;
@@ -533,12 +545,17 @@
                 return xy;
             }
         }
+
         var dirArrX = new Array;
         dirArrX.push(10, -10, 0)
         var dirArrY = new Array;
         dirArrY.push(10, -10, 0)
         var px = 0;
         var py = 2;
+        const scope = document.getElementById('scope')
+        scope.style.borderColor = color;
+        scope.style.top = y + dirArrY[py] + '%'
+        scope.style.left = x + dirArrX[px] + '%'
         document.onkeydown = function (event) {
             var t = 0;
             while (t < document.querySelectorAll('.paint').length) {
@@ -554,6 +571,8 @@
                     py = 2;
                     socket.emit('functions', "moveClient:" + (x - 1) + ':' + y + ':' + id);
                     x -= 1;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
                     break;
                 case 'ArrowUp':
                 case 'w':
@@ -561,6 +580,8 @@
                     py = 1;
                     socket.emit('functions', "moveClient:" + x + ':' + (y - 1) + ':' + id);
                     y -= 1;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
                     break;
                 case 'ArrowRight':
                 case 'd':
@@ -568,6 +589,8 @@
                     py = 2;
                     socket.emit('functions', "moveClient:" + (x + 1) + ':' + y + ':' + id);
                     x += 1;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
                     break;
                 case 'ArrowDown':
                 case 's':
@@ -575,6 +598,8 @@
                     py = 0;
                     socket.emit('functions', "moveClient:" + x + ':' + (y + 1) + ':' + id);
                     y += 1;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
                     break;
                 case " ":
                     socket.emit('functions', "genPaint:" + (x + dirArrX[px]) + ':' + (y + dirArrY[py]) + ':' + color + ":" + id);
@@ -647,7 +672,7 @@
             document.getElementById(id).style.left = x + '%';
             document.getElementById(id).style.top = y + '%';
             var t = 0;
-            
+
         }
         function activePing() {
             socket.emit('functions', "generateUser:" + x + ":" + y + ":" + color + ":" + id + ':' + user);
