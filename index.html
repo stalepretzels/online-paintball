@@ -565,49 +565,64 @@
                 t++;
             }
             switch (event.key) {
-                case 'ArrowLeft':
                 case 'a':
-                    px = 1;
-                    py = 2;
                     socket.emit('functions', "moveClient:" + (x - 1) + ':' + y + ':' + id);
                     x -= 1;
                     scope.style.top = y + dirArrY[py] + '%'
                     scope.style.left = x + dirArrX[px] + '%'
                     break;
-                case 'ArrowUp':
                 case 'w':
-                    px = 2;
-                    py = 1;
                     socket.emit('functions', "moveClient:" + x + ':' + (y - 1) + ':' + id);
                     y -= 1;
                     scope.style.top = y + dirArrY[py] + '%'
                     scope.style.left = x + dirArrX[px] + '%'
                     break;
-                case 'ArrowRight':
                 case 'd':
-                    px = 0;
-                    py = 2;
                     socket.emit('functions', "moveClient:" + (x + 1) + ':' + y + ':' + id);
                     x += 1;
                     scope.style.top = y + dirArrY[py] + '%'
                     scope.style.left = x + dirArrX[px] + '%'
+
                     break;
-                case 'ArrowDown':
                 case 's':
-                    px = 2;
-                    py = 0;
                     socket.emit('functions', "moveClient:" + x + ':' + (y + 1) + ':' + id);
                     y += 1;
                     scope.style.top = y + dirArrY[py] + '%'
                     scope.style.left = x + dirArrX[px] + '%'
+
                     break;
                 case " ":
                     socket.emit('functions', "genPaint:" + (x + dirArrX[px]) + ':' + (y + dirArrY[py]) + ':' + color + ":" + id);
                     break;
+                    case "ArrowDown":
+                    py = 0;
+                    px = 2;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
+                    break;
+                case "ArrowUp":
+                    py = 1;
+                    px = 2;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
+                    break;
+                    case "ArrowRight":
+                    px = 0;
+                    py = 2;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
+                    break;
+                case "ArrowLeft":
+                    px = 1;
+                    py = 2;
+                    scope.style.top = y + dirArrY[py] + '%'
+                    scope.style.left = x + dirArrX[px] + '%'
+                    break;
+
 
             }
         };
-        //functions go here
+
         function generateUser(x, y, color, id, uname) {
             var newDiv = document.createElement('div');
             newDiv.id = id
@@ -653,11 +668,11 @@
             if (document.querySelectorAll('.paint').length > 50) {
                 $('.paint').remove();
             }
-            var img = new Image(); //create a new image object
+            var img = new Image(); 
             img.onload = function () {
-                newDiv.style.backgroundImage = "url(" + this.src + ")"; //set the background image
+                newDiv.style.backgroundImage = "url(" + this.src + ")"; 
             };
-            img.src = color.split('#')[1] + ".png"; //set the source of the image
+            img.src = color.split('#')[1] + ".png"; 
 
             document.getElementById('pb').appendChild(newDiv);
             var t = 0;
