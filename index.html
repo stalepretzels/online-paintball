@@ -622,9 +622,8 @@
         });
         socket.on('broad', function (data) {
             console.log(data)
-            data = data.replace('<', '');
-            data = data.replace('>', '');
-            document.getElementById('output').innerHTML = data + '<br/>' + document.getElementById('output').innerHTML;
+
+            document.getElementById('output').innerText = data +'\n'+ document.getElementById('output').innerText; 
             document.getElementById('output').style.visibility = 'visible';
             var c = 0;
             while (document.querySelectorAll("a").length > c) {
