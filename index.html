@@ -12,9 +12,6 @@
         body {
             height: 100%;
             overflow: hidden;
-        }
-
-        body {
             background-image: url('/bg.png');
             background-repeat: repeat;
         }
@@ -599,11 +596,27 @@
             color += letters[Math.floor(Math.random() * 2)];
             return color;
         }
+        function invertColor(color) {
+            const start = ['#ff0000', '#0000cc']
+            const final = new Array;
+            final.push('red', 'blue')
+            var t;
+            if (color == start[0]) {
+                t = 1
+            }
+            else if (color == start[1]) {
+                t = 0
+            }
+            return final[t]
+        }
         function ShowOverlay() {
             document.getElementById('overlay').style.visibility = 'visible'
         }
+
         var user = getCookie("uname");
         var color = getRandomColor();
+        const invColor = invertColor(color)
+        console.log(invertColor(color))
         var id = Math.floor(Math.random() * 10000000000000);
         var x = Math.floor(Math.random() * 90);
         var y = Math.floor(Math.random() * 90);
@@ -615,6 +628,7 @@
         var connected = false;
 
         window.addEventListener('load', function () {
+
             socket.emit('functions', 'disconnect:')
             connected = true;
             console.log('client has sucessfully connected to socket');
@@ -665,11 +679,7 @@
                 else if (fullHex(document.getElementById(div1ID).style.backgroundColor) == '#ff0000') {
                     t = 0;
                 }
-                colorCode = ['blue', 'red']
-                var scores = [0, 0]
-                //0 = blue, 1=red
-                scores[t]++
-                document.getElementById(colorCode[t] + 'Scr').innerHTML = scores[t]
+                socket.emit('functions', 'scoreUp:' + invColor)
                 socket.emit('functions', "moveClient:" + x + ':' + y + ':' + div1ID);
                 return xy;
             }
@@ -840,6 +850,14 @@
             }
 
         }
+        var scores = [0, 0]
+        var colors = ['red', 'blue']
+        //red: 0, blue: 1
+
+        function scoreUp(color) {
+            document.getElementById(color + 'Scr').innerText = scores[$.inArray(color, colors)]++
+            scores[$.inArray(color, colors)]++
+        }
         socket.on('functions', function (data) {
             console.log("function call received")
             const processedData = data.split(':')
@@ -864,6 +882,10 @@
             else if (processedData[0] == 'genPaint') {
                 generatePaintball(processedData[1], processedData[2], processedData[3], processedData[4]);
             }
+            else if (processedData[0] == 'scoreUp') {
+                scoreUp(processedData[1]);
+            }
+
             else {
                 console.log('no')
             }
