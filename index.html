@@ -665,8 +665,8 @@
             var Split = div2.style.backgroundImage.split('/')[3].split('.')[0]
             if (xy == true && Split != fullHex(document.getElementById(div1ID).style.backgroundColor).split('#')[1]) {
                 socket.emit('messages', getCookie('uname') + ' was slain by ' + document.getElementById(div2.id.split('p')[0]).firstChild.innerText)
-                var x = Math.floor(Math.random() * 90);
-                var y = Math.floor(Math.random() * 90);
+                x = Math.floor(Math.random() * 90);
+                y = Math.floor(Math.random() * 90);
                 scope.style.top = y + dirArrY[py] + '%'
                 scope.style.left = x + dirArrX[px] + '%'
                 var t = 0;
